@@ -53,14 +53,18 @@ export async function resetPassword(token, password) {
 // STRIPE (UNCHANGED)
 // -------------------------
 
-export async function createCheckoutSession(productId, email) {
+export async function createCheckoutSession(productId) {
   const res = await fetch(`${BASE_URL}/api/payments/create-checkout-session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId, email }),
+    body: JSON.stringify({ productId }),
   });
 
-  if (!res.ok) throw new Error("Payment session failed");
+  const data = await res.json();
 
-  return res.json();
+  if (!res.ok) {
+    throw new Error(data.error || data.message || "Payment session failed");
+  }
+
+  return data;
 }

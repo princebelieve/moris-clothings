@@ -23,19 +23,17 @@ export default function ProductDetails() {
   }, [id]);
 
   async function buyNow() {
-    const email = prompt("Enter your email address");
-
-    if (!email) {
-      alert("Email is required");
-      return;
-    }
-
     try {
-      const data = await createCheckoutSession(id, email);
+      const data = await createCheckoutSession(id);
       window.location.href = data.url;
     } catch (err) {
-      alert("Payment failed. Try again.");
-      console.error(err);
+      console.error("Checkout session error:", err);
+
+      if (err.message) {
+        alert(err.message);
+      } else {
+        alert("Unable to start payment. Please try again.");
+      }
     }
   }
 

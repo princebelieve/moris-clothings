@@ -21,8 +21,6 @@ router.post("/create-checkout-session", async (req, res) => {
       },
       mode: "payment",
 
-      customer_email: req.body.email, // IMPORTANT ADDITION
-
       metadata: {
         productId: product._id.toString(),
       },
