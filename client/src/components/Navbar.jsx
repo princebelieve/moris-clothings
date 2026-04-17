@@ -1,15 +1,20 @@
 //client/src/components/Navbar.jsx
-//client/src/components/Navbar.jsx
 import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, isLoggedIn } from "../utils/auth";
+import useClickOutside from "../hooks/useClickOutside";
 
 export default function Navbar() {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const menuRef = useRef();
+  const menuRef = useRef(null);
+  const buttonRef = useRef(null);
+
+  useClickOutside({ current: [menuRef.current, buttonRef.current] }, () => {
+    setOpen(false);
+  });
 
   useEffect(() => {
     function handleScroll() {
@@ -18,17 +23,6 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    function handleClickOutside(e) {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   function handleLogout() {
@@ -48,7 +42,11 @@ export default function Navbar() {
       </Link>
 
       {/* HAMBURGER (RESTORED) */}
-      <button className="hamburger" onClick={() => setOpen(!open)}>
+      <button
+        ref={buttonRef}
+        className="hamburger"
+        onClick={() => setOpen(!open)}
+      >
         ☰
       </button>
 
