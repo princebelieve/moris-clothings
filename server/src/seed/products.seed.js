@@ -10,19 +10,19 @@ require("dotenv").config({
 const products = [
   {
     name: "Classic Senator Wear",
-    price: 45000,
+    price: 1,
     image:
       "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=800&q=80",
   },
   {
     name: "Luxury Suit",
-    price: 90000,
+    price: 2,
     image:
       "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
   },
   {
     name: "Female Designer Gown",
-    price: 38000,
+    price: 1,
     image:
       "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=80",
   },

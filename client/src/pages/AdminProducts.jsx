@@ -72,7 +72,7 @@ export default function AdminProducts() {
     <>
       <Navbar />
 
-      <div style={{ padding: 40 }}>
+      <div className="page">
         <h1>Admin Products</h1>
 
         <ProductForm
@@ -112,7 +112,7 @@ export default function AdminProducts() {
               />
 
               <h3>{product.name}</h3>
-              <p>₦{product.price}</p>
+              <p>£{product.price.toLocaleString()}</p>
 
               <div style={{ display: "flex", gap: 10 }}>
                 <button

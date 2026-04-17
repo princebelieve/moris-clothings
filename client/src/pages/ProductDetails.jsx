@@ -1,3 +1,4 @@
+//client/src/pages/ProductDetails.jsx
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -12,7 +13,13 @@ export default function ProductDetails() {
   useEffect(() => {
     fetch(`${BASE_URL}/api/products/${id}`)
       .then((res) => res.json())
-      .then((data) => setProduct(data));
+      .then((data) => {
+        if (!data || data.message === "Product not found") {
+          setProduct(null);
+          return;
+        }
+        setProduct(data);
+      });
   }, [id]);
 
   async function buyNow() {
@@ -32,16 +39,23 @@ export default function ProductDetails() {
     }
   }
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) {
+    return (
+      <div className="page">
+        <Navbar />
+        <h2>Product not found</h2>
+      </div>
+    );
+  }
 
   return (
     <>
       <Navbar />
 
-      <div style={{ padding: 40 }}>
+      <div className="page">
         <img src={product.image} width="300" alt={product.name} />
         <h1>{product.name}</h1>
-        <h2>₦{product.price}</h2>
+        <h2>£{Number(product?.price || 0).toLocaleString()}</h2>
 
         <button onClick={buyNow}>Buy Now</button>
       </div>

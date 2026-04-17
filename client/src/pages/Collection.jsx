@@ -1,3 +1,4 @@
+//client/src/pages/Collection.jsx
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ProductGrid from "../components/ProductGrid";

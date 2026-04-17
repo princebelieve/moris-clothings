@@ -1,3 +1,4 @@
+//client/src/components/Hero.jsx
 import { useNavigate } from "react-router-dom";
 
 export default function Hero() {
@@ -13,7 +14,7 @@ export default function Hero() {
           men and women.
         </p>
 
-        <div className="hero-buttons">
+        <div>
           <button className="primary" onClick={() => navigate("/collection")}>
             Shop Collection
           </button>
@@ -26,8 +27,6 @@ export default function Hero() {
           </button>
         </div>
       </div>
-
-      <img src="/hero.jpg" alt="Moris Clothings" className="hero-image" />
     </div>
   );
 }

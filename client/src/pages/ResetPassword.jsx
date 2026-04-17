@@ -21,7 +21,7 @@ export default function ResetPassword() {
   }
 
   return (
-    <div style={{ padding: 40 }}>
+    <div className="page">
       <h2>Reset Password</h2>
 
       <form onSubmit={handleSubmit}>

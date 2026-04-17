@@ -30,19 +30,7 @@ export default function Navbar() {
             <Link to="/register">Register</Link>
           </>
         ) : (
-          <button
-            type="button"
-            onClick={handleLogout}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              color: "inherit",
-              font: "inherit",
-            }}
-          >
-            Logout
-          </button>
+          <button onClick={handleLogout}>Logout</button>
         )}
       </div>
 

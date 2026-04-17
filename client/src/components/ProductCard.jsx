@@ -8,7 +8,7 @@ export default function ProductCard({ product }) {
       <img src={product.image} alt={product.name} />
 
       <h3>{product.name}</h3>
-      <p>₦{product.price.toLocaleString()}</p>
+      <p>£{product.price.toLocaleString()}</p>
 
       <button onClick={() => navigate(`/product/${product._id}`)}>
         View Product

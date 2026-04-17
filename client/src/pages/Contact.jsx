@@ -5,7 +5,7 @@ export default function Contact() {
     <>
       <Navbar />
 
-      <div style={{ padding: 40 }}>
+      <div className="page">
         <h1>Contact Moris Clothings</h1>
 
         <p>We respond within minutes on WhatsApp.</p>
