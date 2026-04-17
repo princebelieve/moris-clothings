@@ -24,33 +24,37 @@ export default function ForgotPassword() {
     <>
       <Navbar />
 
-      <div style={{ maxWidth: 420, margin: "40px auto", padding: 24 }}>
+      <div className="form" style={{ marginTop: 50 }}>
         <h1>Forgot Password</h1>
-        <p>Enter your email and we will send you a reset link.</p>
+
+        <p>Enter your email and we’ll send you a reset link.</p>
 
         {!sent ? (
-          <form
-            onSubmit={handleSubmit}
-            style={{ display: "flex", flexDirection: "column", gap: 16 }}
-          >
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+          <form onSubmit={handleSubmit}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <input
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
 
-            <button type="submit">Send Reset Link</button>
+              <button type="submit" className="btn-primary">
+                Send Reset Link
+              </button>
+            </div>
           </form>
         ) : (
-          <p>
+          <p style={{ marginTop: 10, color: "#2e7d32" }}>
             If that email exists, a password reset link has been sent.
           </p>
         )}
 
-        <div style={{ marginTop: 20 }}>
-          <Link to="/login">Back to Login</Link>
+        <div style={{ marginTop: 18 }}>
+          <Link to="/login" style={{ color: "var(--gold)" }}>
+            Back to Login
+          </Link>
         </div>
       </div>
     </>

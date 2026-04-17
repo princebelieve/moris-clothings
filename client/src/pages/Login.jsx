@@ -32,67 +32,49 @@ export default function Login() {
     <>
       <Navbar />
 
-      <div style={{ maxWidth: 420, margin: "40px auto", padding: 24 }}>
+      <div className="form" style={{ marginTop: 50 }}>
         <h1>Login</h1>
-        <p>Welcome back. Sign in to manage your products.</p>
+        <p className="muted" style={{ marginBottom: 20 }}>
+          Welcome back. Sign in to manage your products.
+        </p>
 
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: 16 }}
-        >
-          <input
-            type="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            required
-          />
-
-          <div style={{ position: "relative" }}>
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
             <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
+              type="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
               required
-              style={{ width: "100%", paddingRight: 40 }}
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: "absolute",
-                right: 8,
-                top: "50%",
-                transform: "translateY(-50%)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+
+            <div className="password-field">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                required
+              />
+
+              <button
+                type="button"
+                className="password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
+
+            <button type="submit" className="btn-primary">
+              Sign In
             </button>
           </div>
-
-          <button
-            type="submit"
-            style={{
-              padding: "10px 16px",
-              backgroundColor: "#000",
-              color: "#fff",
-              border: "none",
-              borderRadius: 4,
-              cursor: "pointer",
-              fontSize: 16,
-            }}
-          >
-            Sign In
-          </button>
         </form>
 
         <p style={{ marginTop: 16, fontSize: 14 }}>
           Don't have an account?{" "}
-          <Link to="/register" style={{ color: "#0066cc" }}>
+          <Link to="/register" style={{ color: "var(--gold)" }}>
             Register here
           </Link>
         </p>

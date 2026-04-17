@@ -43,16 +43,7 @@ export default function ProductForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 12,
-        maxWidth: 400,
-        marginBottom: 30,
-      }}
-    >
+    <form onSubmit={handleSubmit} className="form" style={{ maxWidth: 500 }}>
       <h2>{editingProduct ? "Edit Product" : "Add Product"}</h2>
 
       <input
@@ -80,11 +71,13 @@ export default function ProductForm({
         required
       />
 
-      <div style={{ display: "flex", gap: 10 }}>
-        <button type="submit">{editingProduct ? "Update" : "Add"}</button>
+      <div className="form-actions">
+        <button type="submit" className="btn-primary">
+          {editingProduct ? "Update Product" : "Add Product"}
+        </button>
 
         {editingProduct && (
-          <button type="button" onClick={onCancelEdit}>
+          <button type="button" onClick={onCancelEdit} className="btn-danger">
             Cancel
           </button>
         )}

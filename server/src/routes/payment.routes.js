@@ -16,7 +16,9 @@ router.post("/create-checkout-session", async (req, res) => {
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
+      automatic_payment_methods: {
+        enabled: true,
+      },
       mode: "payment",
 
       customer_email: req.body.email, // IMPORTANT ADDITION

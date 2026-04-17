@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { resetPassword } from "../services/api";
+import Navbar from "../components/Navbar";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -21,19 +22,34 @@ export default function ResetPassword() {
   }
 
   return (
-    <div className="page">
-      <h2>Reset Password</h2>
+    <>
+      <Navbar />
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="password"
-          placeholder="New password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+      <div className="form" style={{ marginTop: 50 }}>
+        <h2>Reset Password</h2>
 
-        <button>Reset Password</button>
-      </form>
-    </div>
+        <p className="muted" style={{ marginBottom: 20 }}>
+          Enter your new password below.
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <input
+            type="password"
+            placeholder="New password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+          <button
+            type="submit"
+            className="btn-primary"
+            style={{ marginTop: 14 }}
+          >
+            Reset Password
+          </button>
+        </form>
+      </div>
+    </>
   );
 }

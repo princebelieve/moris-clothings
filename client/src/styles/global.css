@@ -414,3 +414,72 @@ button:hover {
     display: flex;
   }
 }
+
+/* ================= FORMS SYSTEM ================= */
+
+.form {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 28px;
+  background: #fff;
+  border: 1px solid #eef2f6;
+  border-radius: 16px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+}
+
+.form h2,
+.form h1 {
+  margin-bottom: 18px;
+  color: var(--navy);
+  font-size: 24px;
+}
+
+.form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d9e2ec;
+  border-radius: 10px;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+}
+
+.form input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 74, 0.15);
+}
+
+.form button {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.form .btn-primary {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.form .btn-dark {
+  background: #111;
+  color: white;
+}
+
+.form .btn-danger {
+  background: #f3f4f6;
+  color: #111;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-actions button {
+  flex: 1;
+}
