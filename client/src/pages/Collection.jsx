@@ -19,10 +19,16 @@ export default function Collection() {
     <>
       <Navbar />
 
-      <div style={{ padding: "40px" }}>
-        <h1>All Products</h1>
-        <ProductGrid products={products} />
-      </div>
+      <section className="section-alt">
+        <div className="container">
+          <h1 className="title">All Products</h1>
+          <p className="muted">
+            Explore premium tailoring, custom gowns, senator wears and more.
+          </p>
+
+          <ProductGrid products={products} />
+        </div>
+      </section>
     </>
   );
 }

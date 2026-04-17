@@ -53,11 +53,22 @@ export default function ProductDetails() {
       <Navbar />
 
       <div className="page">
-        <img src={product.image} width="300" alt={product.name} />
-        <h1>{product.name}</h1>
-        <h2>£{Number(product?.price || 0).toLocaleString()}</h2>
+        <div className="product-detail">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="product-detail-image"
+          />
 
-        <button onClick={buyNow}>Buy Now</button>
+          <div className="product-detail-content">
+            <h1>{product.name}</h1>
+            <h2>£{Number(product?.price || 0).toLocaleString()}</h2>
+
+            <button className="primary" onClick={buyNow}>
+              Buy Now
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
