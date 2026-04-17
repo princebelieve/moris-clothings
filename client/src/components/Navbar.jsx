@@ -1,62 +1,62 @@
 //client/src/components/Navbar.jsx
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, isLoggedIn } from "../utils/auth";
 
 export default function Navbar() {
   const navigate = useNavigate();
+
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const menuRef = useRef();
+
+  useEffect(() => {
+    function handleScroll() {
+      setScrolled(window.scrollY > 50);
+    }
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   function handleLogout() {
     logout();
     navigate("/login");
-    setOpen(false);
-  }
-
-  function closeMenu() {
-    setOpen(false);
   }
 
   return (
     <nav className="navbar">
-      <Link to="/" onClick={closeMenu}>
-        <img src="/logo.png" className="logo" alt="Moris Clothings" />
+      <Link to="/">
+        <img
+          src="/logo.png"
+          className={`logo ${scrolled ? "hide-logo" : ""}`}
+          alt="Moris Clothings"
+        />
       </Link>
 
-      {/* HAMBURGER BUTTON */}
-      <button className="hamburger" onClick={() => setOpen(!open)}>
-        ☰
-      </button>
+      <div ref={menuRef} className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/collection">Collection</Link>
+        <Link to="/about">About</Link>
+        <Link to="/contact">Contact</Link>
 
-      {/* NAV LINKS */}
-      <div className={`nav-links ${open ? "active" : ""}`}>
-        <Link to="/" onClick={closeMenu}>
-          Home
-        </Link>
-        <Link to="/collection" onClick={closeMenu}>
-          Collection
-        </Link>
-        <Link to="/about" onClick={closeMenu}>
-          About
-        </Link>
-        <Link to="/contact" onClick={closeMenu}>
-          Contact
-        </Link>
-
-        {isLoggedIn() && (
-          <Link to="/admin/products" onClick={closeMenu}>
-            Admin
-          </Link>
-        )}
+        {isLoggedIn() && <Link to="/admin/products">Admin</Link>}
 
         {!isLoggedIn() ? (
           <>
-            <Link to="/login" onClick={closeMenu}>
-              Login
-            </Link>
-            <Link to="/register" onClick={closeMenu}>
-              Register
-            </Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
           </>
         ) : (
           <button onClick={handleLogout}>Logout</button>

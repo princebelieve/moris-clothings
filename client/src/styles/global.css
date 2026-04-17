@@ -96,6 +96,16 @@ button {
   color: #111;
 }
 
+/* CTA button */
+.cta {
+  background: var(--gold);
+  border: none;
+  padding: 10px 16px;
+  color: var(--navy);
+  font-weight: bold;
+  border-radius: var(--radius);
+}
+
 /* ================= HERO ================= */
 
 .hero {
@@ -176,11 +186,6 @@ button {
   overflow: hidden;
   border: 1px solid #eceff3;
   box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 .card img {
@@ -370,46 +375,11 @@ button:hover {
   }
 }
 
-/* ================= HAMBURGER ================= */
-
-.hamburger {
-  display: none;
-  font-size: 28px;
-  background: transparent;
-  border: none;
-  color: #111;
-}
-
-/* MOBILE NAV MENU */
 @media (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
-  .nav-links {
-    position: absolute;
-    top: 76px;
-    left: 0;
-    right: 0;
-    background: white;
-    flex-direction: column;
-    gap: 18px;
-    padding: 20px;
-
-    display: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    z-index: 999;
-  }
-
-  .nav-links.active {
-    display: flex;
-  }
-
-  .cta {
-    display: none; /* hide order button on mobile (optional clean UI) */
-  }
-
-  .navbar {
-    position: sticky;
+  .hide-logo {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: all 0.2s ease;
   }
 }
