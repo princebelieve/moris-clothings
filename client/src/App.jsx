@@ -15,7 +15,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AdminProducts from "./pages/AdminProducts";
 
-import RequireAuth from "./components/RequireAuth.jsx";
+import RequireAdmin from "./components/RequireAdmin.jsx";
 
 export default function App() {
   return (
@@ -38,9 +38,9 @@ export default function App() {
       <Route
         path="/admin/products"
         element={
-          <RequireAuth>
+          <RequireAdmin>
             <AdminProducts />
-          </RequireAuth>
+          </RequireAdmin>
         }
       />
     </Routes>

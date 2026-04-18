@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { logout, isLoggedIn } from "../utils/auth";
+import useAuth from "../hooks/useAuth";
 import useClickOutside from "../hooks/useClickOutside";
 
 export default function Navbar() {
@@ -10,6 +10,7 @@ export default function Navbar() {
 
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isLoggedIn, isAdmin, logout } = useAuth();
 
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
@@ -62,9 +63,9 @@ export default function Navbar() {
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
 
-          {isLoggedIn() && <Link to="/admin/products">Admin</Link>}
+          {isAdmin && <Link to="/admin/products">Admin</Link>}
 
-          {!isLoggedIn() ? (
+          {!isLoggedIn ? (
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
@@ -115,14 +116,13 @@ export default function Navbar() {
           <Link to="/contact" onClick={() => setOpen(false)}>
             Contact
           </Link>
-
-          {isLoggedIn() && (
+          {isAdmin && (
             <Link to="/admin/products" onClick={() => setOpen(false)}>
               Admin
             </Link>
           )}
 
-          {!isLoggedIn() ? (
+          {!isLoggedIn ? (
             <>
               <Link to="/login" onClick={() => setOpen(false)}>
                 Login

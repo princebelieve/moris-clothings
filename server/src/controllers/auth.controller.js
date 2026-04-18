@@ -3,6 +3,10 @@ const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 
+const adminEmails = (process.env.ADMIN_EMAILS || "")
+  .split(",")
+  .map((email) => email.trim().toLowerCase());
+
 // 🟢 REGISTER
 const registerUser = async (req, res) => {
   try {
@@ -16,13 +20,14 @@ const registerUser = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const normalizedEmail = email.toLowerCase();
+
     const user = await User.create({
       name,
-      email,
+      email: normalizedEmail,
       password: hashedPassword,
-      role: "user",
+      role: adminEmails.includes(normalizedEmail) ? "admin" : "user",
     });
-
     res.status(201).json({
       id: user._id,
       name: user.name,

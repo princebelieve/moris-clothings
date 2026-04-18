@@ -65,6 +65,10 @@ export default function AdminProducts() {
       return;
     }
 
+    if (editingProduct?._id === id) {
+      setEditingProduct(null);
+    }
+
     loadProducts();
   }
 

@@ -22,7 +22,14 @@ export default function Login() {
 
     if (res.token) {
       setToken(res.token);
-      navigate("/admin/products");
+
+      const payload = JSON.parse(atob(res.token.split(".")[1]));
+
+      if (payload.role === "admin") {
+        navigate("/admin/products");
+      } else {
+        navigate("/");
+      }
     } else {
       alert(res.message || "Login failed");
     }
