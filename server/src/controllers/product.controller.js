@@ -1,5 +1,6 @@
 // server/src/controllers/product.controller.js
 const Product = require("../models/Product");
+const { uploadToR2 } = require("../config/r2");
 
 async function getProducts(req, res) {
   try {
@@ -26,7 +27,13 @@ async function getProduct(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const { name, price, image } = req.body;
+    const { name, price } = req.body;
+
+    let image = "";
+
+    if (req.file) {
+      image = await uploadToR2(req.file);
+    }
 
     const product = await Product.create({
       name,
@@ -42,21 +49,20 @@ async function createProduct(req, res) {
 
 async function updateProduct(req, res) {
   try {
-    const { name, price, image } = req.body;
-
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      {
-        name,
-        price,
-        image,
-      },
-      { new: true },
-    );
+    const product = await Product.findById(req.params.id);
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+
+    product.name = req.body.name;
+    product.price = req.body.price;
+
+    if (req.file) {
+      product.image = await uploadToR2(req.file);
+    }
+
+    await product.save();
 
     res.json(product);
   } catch (err) {

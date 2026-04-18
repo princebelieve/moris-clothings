@@ -64,11 +64,9 @@ export default function ProductForm({
       />
 
       <input
-        name="image"
-        placeholder="Image URL"
-        value={form.image}
-        onChange={handleChange}
-        required
+        type="file"
+        accept="image/*"
+        onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
       />
 
       <div className="form-actions">

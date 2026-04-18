@@ -27,13 +27,21 @@ export default function AdminProducts() {
       ? `${BASE_URL}/api/products/${editingProduct._id}`
       : `${BASE_URL}/api/products`;
 
+    const body = new FormData();
+
+    body.append("name", formData.name);
+    body.append("price", formData.price);
+
+    if (formData.image) {
+      body.append("image", formData.image);
+    }
+
     const res = await fetch(url, {
       method,
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${getToken()}`,
       },
-      body: JSON.stringify(formData),
+      body,
     });
 
     const data = await res.json();
