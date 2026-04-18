@@ -85,6 +85,65 @@ button {
   display: none;
 }
 
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-links a,
+.nav-links button {
+  color: var(--navy);
+  font-weight: 600;
+  background: none;
+  border: none;
+  font-size: 15px;
+}
+
+.cta {
+  background: var(--gold);
+  color: #111;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 76px;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #eceff3;
+  padding: 24px 20px;
+  display: none;
+  flex-direction: column;
+  z-index: 1500;
+  box-shadow: 0 14px 30px rgba(0,0,0,0.08);
+}
+
+.mobile-menu-overlay.active {
+  display: flex;
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.mobile-menu-links a,
+.mobile-menu-links button {
+  background: none;
+  border: none;
+  text-align: left;
+  color: var(--navy);
+  font-size: 18px;
+  font-weight: 600;
+  padding: 6px 0;
+}
+
 @media (max-width: 768px) {
   .navbar {
     height: 76px;
@@ -343,14 +402,6 @@ button:hover {
   margin: 0 0 28px;
   color: var(--gold);
   font-size: 30px;
-}
-
-.hamburger {
-  display: none;
-  font-size: 28px;
-  background: transparent;
-  border: none;
-  color: #111;
 }
 
 /* ================= FORMS SYSTEM ================= */
