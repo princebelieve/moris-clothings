@@ -2,10 +2,13 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ProductGrid from "../components/ProductGrid";
+import useScrollReveal from "../hooks/useScrollReveal";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function Collection() {
+  useScrollReveal();
+
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -19,14 +22,18 @@ export default function Collection() {
     <>
       <Navbar />
 
-      <section className="section-alt">
+      <section className="section-alt reveal">
         <div className="container">
-          <h1 className="title">All Products</h1>
-          <p className="muted">
-            Explore premium tailoring, custom gowns, senator wears and more.
-          </p>
+          <div className="reveal">
+            <h1 className="title">All Products</h1>
+            <p className="muted">
+              Explore premium tailoring, custom gowns, senator wears and more.
+            </p>
+          </div>
 
-          <ProductGrid products={products} />
+          <div className="reveal">
+            <ProductGrid products={products} />
+          </div>
         </div>
       </section>
     </>

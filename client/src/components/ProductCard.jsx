@@ -1,10 +1,11 @@
+//client/src/components/ProductCard.jsx
 import { useNavigate } from "react-router-dom";
 
 export default function ProductCard({ product }) {
   const navigate = useNavigate();
 
   return (
-    <div className="card">
+    <div className="card hover-lift">
       <img src={product.image} alt={product.name} />
 
       <h3>{product.name}</h3>
