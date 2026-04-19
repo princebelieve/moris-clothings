@@ -289,13 +289,49 @@ button {
 
 @media (max-width: 768px) {
   .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 60px 20px;
+    min-height: 78vh;
+    padding: 32px 16px 40px;
+    align-items: flex-end;
+    justify-content: center;
+    text-align: left;
+    background-position: center top;
+  }
+
+  .hero > div:first-child {
+    width: 100%;
+    max-width: 100%;
+    padding: 22px 20px;
+    border-radius: 20px;
+    background: rgba(15, 28, 46, 0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
   }
 
   .hero h1 {
     font-size: 34px;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+
+  .hero p {
+    max-width: 100%;
+    font-size: 16px;
+    line-height: 1.65;
+    margin-bottom: 22px;
+    color: rgba(255,255,255,0.88);
+  }
+
+  .hero > div:first-child > div {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .primary,
+  .secondary {
+    width: 100%;
+    margin-right: 0;
   }
 
   .nav-links {
