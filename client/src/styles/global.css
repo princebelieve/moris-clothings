@@ -1091,11 +1091,35 @@ button:hover {
 }
 
 .two-col {
+  display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+.two-col > * {
+  width: 100%;
+  min-width: 0;
+}
+
+.two-col input,
+.two-col select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .three-col {
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.three-col > * {
+  min-width: 0;
+  width: 100%;
 }
 
 .measurement-section {
@@ -1135,16 +1159,6 @@ button:hover {
   font-size: 14px;
 }
 
-.measurement-form {
-  background: #1f3556;
-  color: white;
-  padding: 26px;
-  border-radius: 22px;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.14);
-  border: 1px solid rgba(255,255,255,0.06);
-  max-width: 100%;
-}
-
 .measurement-form h2,
 .measurement-form h3,
 .measurement-form p {
@@ -1159,6 +1173,17 @@ button:hover {
 .measurement-form select {
   background: rgba(255,255,255,0.08);
   color: white;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 38px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.measurement-form select option {
+  background: #ffffff;
+  color: #1f3556;
 }
 
 .contact-info-panel {
@@ -1218,12 +1243,15 @@ button:hover {
     padding: 18px;
   }
 
-  .two-col,
-  .three-col,
-  .contact-strip {
-    grid-template-columns: 1fr;
-    flex-direction: column;
-  }
+.two-col {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.three-col {
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
 
   .measurement-header h2 {
     font-size: 22px;
@@ -1235,6 +1263,15 @@ button:hover {
     padding: 10px 11px;
     font-size: 13px;
   }
+
+  .measurement-form select {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.measurement-form select::-ms-expand {
+  display: none;
+}
 
   .contact-hero-image img {
     height: 420px;
