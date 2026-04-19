@@ -11,6 +11,7 @@ const webhookRoutes = require("./routes/webhook.routes");
 const productRoutes = require("./routes/product.routes");
 const orderRoutes = require("./routes/order.routes");
 const authRoutes = require("./routes/auth.routes"); // ✅ ADD THIS
+const measurementRoutes = require("./routes/measurementRoutes");
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use("/api/auth", authRoutes); // ✅ ADD THIS
 app.use("/api/payments", paymentRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/measurements", measurementRoutes);
 
 app.get("/", (req, res) => {
   res.send("Moris Clothings API is running");
