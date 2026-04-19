@@ -1036,29 +1036,33 @@ button:hover {
 }
 
 .measurement-layout {
-  margin-top: 0;
+  margin-top: 10px;
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
-  gap: 30px;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.75fr);
+  gap: 22px;
   align-items: start;
+  max-width: 1080px;
 }
 
 .measurement-header h2 {
-  margin: 8px 0 10px;
-  font-size: 38px;
-  color: var(--navy);
+  margin: 6px 0 8px;
+  font-size: 30px;
+  line-height: 1.1;
+  color: white;
 }
 
 .measurement-header p {
-  color: #66758c;
-  margin-bottom: 30px;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 22px;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .measurement-grid {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .two-col {
@@ -1073,13 +1077,12 @@ button:hover {
 .measurement-form select,
 .measurement-form textarea {
   width: 100%;
-  padding: 15px 16px;
-  border-radius: 14px;
-  border: 1px solid #dbe4ee;
-  background: #f8fafc;
-  font-size: 15px;
-  color: var(--text);
-  box-sizing: border-box;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.07);
+  color: white;
+  font-size: 14px;
 }
 
 .measurement-form input:focus,
@@ -1092,12 +1095,14 @@ button:hover {
 }
 
 .measurement-section {
-  margin-top: 22px;
+  margin-top: 18px;
 }
 
 .luxury-card h3 {
-  margin: 0 0 18px;
-  color: var(--navy);
+  margin: 0 0 12px;
+  color: rgba(255,255,255,0.92);
+  font-size: 15px;
+  letter-spacing: 0.3px;
 }
 
 .measurement-form textarea {
@@ -1106,24 +1111,25 @@ button:hover {
 }
 
 .measurement-submit {
-  margin-top: 24px;
+  margin-top: 18px;
   width: 100%;
   border: none;
-  border-radius: 16px;
-  padding: 18px;
+  border-radius: 14px;
+  padding: 14px;
   background: linear-gradient(135deg, var(--gold), #d6b46f);
   color: #111;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .measurement-form {
   background: #1f3556;
   color: white;
-  padding: 36px;
-  border-radius: 28px;
-  box-shadow: 0 22px 60px rgba(0,0,0,0.18);
-  border: 1px solid rgba(255,255,255,0.08);
+  padding: 26px;
+  border-radius: 22px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.14);
+  border: 1px solid rgba(255,255,255,0.06);
+  max-width: 100%;
 }
 
 .measurement-form h2,
@@ -1208,10 +1214,33 @@ button:hover {
   }
 
   .contact-strip,
-  .two-col,
+  .two-col {
+  grid-template-columns: 1fr;
+}
+
+.three-col {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.measurement-form {
+  padding: 20px;
+}
+
+.measurement-header h2 {
+  font-size: 26px;
+}
+
+.measurement-form input,
+.measurement-form select,
+.measurement-form textarea {
+  padding: 11px 12px;
+}
+
+@media (max-width: 560px) {
   .three-col {
     grid-template-columns: 1fr;
   }
+}
 
   .contact-hero-image img {
     height: 420px;
