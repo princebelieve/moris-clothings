@@ -1040,86 +1040,99 @@ button:hover {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.75fr);
-  gap: 22px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.75fr);
+  gap: 18px;
   align-items: start;
-  max-width: 1080px;
+  max-width: 1000px;
+}
+
+.measurement-form {
+  background: #1f3556;
+  color: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  border: 1px solid rgba(255,255,255,0.06);
+  max-width: 100%;
 }
 
 .measurement-header h2 {
-  margin: 6px 0 8px;
-  font-size: 30px;
+  margin: 4px 0 6px;
+  font-size: 26px;
   line-height: 1.1;
   color: white;
 }
 
 .measurement-header p {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.5;
   color: rgba(255,255,255,0.72);
-  margin-bottom: 22px;
-  font-size: 14px;
-  line-height: 1.6;
+}
+
+.measurement-grid {
+  display: grid;
+  gap: 8px;
 }
 
 .measurement-grid {
   display: grid;
   gap: 10px;
+  width: 100%;
+}
+
+.measurement-grid > * {
+  min-width: 0;
+}
+
+.measurement-grid input,
+.measurement-grid select {
+  min-width: 0;
 }
 
 .two-col {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .three-col {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.measurement-section {
+  margin-top: 14px;
+}
+
+.luxury-card h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.92);
 }
 
 .measurement-form input,
 .measurement-form select,
 .measurement-form textarea {
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 13px;
+  border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.07);
   color: white;
-  font-size: 14px;
-}
-
-.measurement-form input:focus,
-.measurement-form select:focus,
-.measurement-form textarea:focus {
-  outline: none;
-  border-color: var(--gold);
-  box-shadow: 0 0 0 4px rgba(201,162,74,0.15);
-  background: white;
-}
-
-.measurement-section {
-  margin-top: 18px;
-}
-
-.luxury-card h3 {
-  margin: 0 0 12px;
-  color: rgba(255,255,255,0.92);
-  font-size: 15px;
-  letter-spacing: 0.3px;
 }
 
 .measurement-form textarea {
-  margin-top: 22px;
+  margin-top: 14px;
+  min-height: 80px;
   resize: vertical;
 }
 
 .measurement-submit {
-  margin-top: 18px;
-  width: 100%;
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  background: linear-gradient(135deg, var(--gold), #d6b46f);
-  color: #111;
-  font-size: 15px;
-  font-weight: 700;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
 .measurement-form {
@@ -1135,17 +1148,6 @@ button:hover {
 .measurement-form h2,
 .measurement-form h3,
 .measurement-form p {
-  color: white;
-}
-
-.measurement-form input,
-.measurement-form select,
-.measurement-form textarea {
-  width: 100%;
-  padding: 15px 16px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.15);
-  background: rgba(255,255,255,0.08);
   color: white;
 }
 
@@ -1203,55 +1205,45 @@ button:hover {
 
 @media (max-width: 900px) {
   .measurement-layout {
-  margin-top: 40px;
-  position: relative;
-  z-index: 2;
     grid-template-columns: 1fr;
+    gap: 18px;
+    margin-top: 24px;
   }
 
   .contact-copy h1 {
     font-size: 40px;
   }
 
-  .contact-strip,
-  .two-col {
-  grid-template-columns: 1fr;
-}
+  .measurement-form {
+    padding: 18px;
+  }
 
-.three-col {
-  grid-template-columns: repeat(2, 1fr);
-}
+  .two-col,
+  .three-col,
+  .contact-strip {
+    grid-template-columns: 1fr;
+    flex-direction: column;
+  }
 
-.measurement-form {
-  padding: 20px;
-}
+  .measurement-header h2 {
+    font-size: 22px;
+  }
 
-.measurement-header h2 {
-  font-size: 26px;
-}
+  .measurement-form input,
+  .measurement-form select,
+  .measurement-form textarea {
+    padding: 10px 11px;
+    font-size: 13px;
+  }
 
-.measurement-form input,
-.measurement-form select,
-.measurement-form textarea {
-  padding: 11px 12px;
+  .contact-hero-image img {
+    height: 420px;
+  }
 }
 
 @media (max-width: 560px) {
   .three-col {
     grid-template-columns: 1fr;
-  }
-}
-
-  .contact-hero-image img {
-    height: 420px;
-  }
-
-  .measurement-layout {
-    margin-top: 30px;
-  }
-
-  .measurement-form {
-    padding: 24px;
   }
 }
 
