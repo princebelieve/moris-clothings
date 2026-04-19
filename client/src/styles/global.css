@@ -298,15 +298,14 @@ button {
   }
 
   .hero > div:first-child {
-    width: 100%;
-    max-width: 100%;
-    padding: 22px 20px;
-    border-radius: 20px;
-    background: rgba(15, 28, 46, 0.82);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
-  }
+  width: 100%;
+  max-width: 100%;
+  padding: 22px 20px;
+  border-radius: 20px;
+  background: rgba(15, 28, 46, 0.92);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+}
 
   .hero h1 {
     font-size: 34px;
