@@ -514,6 +514,33 @@ button:hover {
   gap: 24px;
 }
 
+@media (max-width: 768px) {
+  .dual-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .dual-card {
+    padding: 22px 20px;
+    border-radius: 18px;
+    background: #15263f;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: none;
+  }
+
+  .dual-card h2 {
+    font-size: 22px;
+  }
+
+  .dual-card p {
+    font-size: 14px;
+  }
+
+  .hover-lift::after {
+    display: none;
+  }
+}
+
 .dual-card {
   background: white;
   padding: 28px;
@@ -524,6 +551,30 @@ button:hover {
 .dual-card h2 {
   margin-bottom: 10px;
   color: var(--navy);
+}
+
+.dual-label {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.dual-card h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  line-height: 1.15;
+  color: white;
+}
+
+.dual-card p {
+  margin: 0;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.7;
+  font-size: 15px;
 }
 
 .service-grid {

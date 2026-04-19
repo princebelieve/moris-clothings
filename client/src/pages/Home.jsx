@@ -31,18 +31,20 @@ export default function Home() {
       <section className="section reveal">
         <div className="container dual-grid">
           <div className="dual-card hover-lift">
-            <h2>🛍️ Shop Ready-Made Fashion</h2>
+            <span className="dual-label">READY TO WEAR</span>
+            <h2>Premium Fashion Collection</h2>
             <p>
-              Explore premium senator wears, gowns, suits, and modern outfits
-              crafted for elegance and confidence.
+              Discover senator wears, suits, gowns and refined styles created
+              for modern elegance.
             </p>
           </div>
 
           <div className="dual-card hover-lift">
-            <h2>✂️ Custom Tailoring Services</h2>
+            <span className="dual-label">BESPOKE TAILORING</span>
+            <h2>Custom-Made To Your Measurements</h2>
             <p>
-              Want something unique? We design and sew custom outfits tailored
-              to your exact measurements and style.
+              Every outfit is tailored personally to your preferred fit, fabric
+              and style.
             </p>
           </div>
         </div>
