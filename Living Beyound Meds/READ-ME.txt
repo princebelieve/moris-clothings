@@ -1,0 +1,9 @@
+  =>  Template Name    : Coraluxe - Hotel & Resort Website Template
+
+  =>  Template Link    : https://htmlcodex.com/hotel-resort-website-template
+
+  =>  Template License : https://htmlcodex.com/license (or read the LICENSE.txt file)
+
+  =>  Template Author  : HTML Codex
+
+  =>  Author Website   : https://htmlcodex.com
