@@ -100,7 +100,7 @@ export default function MorisClothingsLandingPage() {
 
           <div className="mt-4 space-y-2 text-neutral-300">
             <p>WhatsApp: +44 7440 092312</p>
-            <p>Email: moris.era@yahoo.com</p>
+            <p>Email: contact@morisclothing.co.uk</p>
             <p>Instagram: Add your Instagram handle</p>
           </div>
         </div>

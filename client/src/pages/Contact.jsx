@@ -40,12 +40,12 @@ export default function Contact() {
                   </div>
                 </a>
 
-                <a href="mailto:moris.era@yahoo.com" className="strip-card">
+                <a href="mailto:contact@morisclothing.co.uk" className="strip-card">
                   <Mail size={22} />
 
                   <div>
                     <strong>Email</strong>
-                    <span>moris.era@yahoo.com</span>
+                    <span>contact@morisclothing.co.uk</span>
                   </div>
                 </a>
               </div>

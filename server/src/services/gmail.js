@@ -17,7 +17,8 @@ async function getAccessToken() {
 async function sendEmail({ to, subject, text }) {
   const accessToken = await getAccessToken();
   const safeSubject = String(subject).replace(/[\r\n]+/g, " ");
-  const message = [`From: Moris Clothing <${process.env.GMAIL_USER}>`, `To: ${to}`, `Subject: ${safeSubject}`, "MIME-Version: 1.0", "Content-Type: text/plain; charset=UTF-8", "", text].join("\r\n");
+  const contactEmail = process.env.CONTACT_EMAIL || "contact@morisclothing.co.uk";
+  const message = [`From: Moris Clothing <${process.env.GMAIL_USER}>`, `Reply-To: ${contactEmail}`, `To: ${to}`, `Subject: ${safeSubject}`, "MIME-Version: 1.0", "Content-Type: text/plain; charset=UTF-8", "", text].join("\r\n");
   const response = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages/send", {
     method: "POST", headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
     body: JSON.stringify({ raw: Buffer.from(message, "utf8").toString("base64url") }),
