@@ -25,6 +25,18 @@ router.get("/session/:sessionId", async (req, res) => {
     res.json({ id: order._id, status: order.status, amount: order.amount, currency: order.currency, items: order.items?.map(i => ({ name: i.name, size: i.size, quantity: i.quantity, price: i.price })), delivery: order.delivery });
   } catch { res.status(503).json({ message: "We could not verify your payment yet. Please retry or contact Moris with your checkout reference." }); }
 });
+router.get("/mine", protect, async (req, res) => {
+  try {
+    const orders = await Order.find({ "customer.email": req.user.email.toLowerCase() })
+      .select("items amount subtotal delivery currency status fulfillment trackingNumber createdAt paidAt")
+      .sort({ createdAt: -1 })
+      .limit(50)
+      .lean();
+    return res.set("Cache-Control", "no-store").json(orders);
+  } catch {
+    return res.status(500).json({ message: "Unable to load your orders." });
+  }
+});
 router.use(protect, adminOnly);
 router.get("/summary", async (_req, res) => {
   try {

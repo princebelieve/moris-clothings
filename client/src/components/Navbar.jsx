@@ -69,12 +69,13 @@ export default function Navbar() {
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
 
-          {isAdmin && <Link to="/admin">Dashboard</Link>}
+          {isAdmin ? <><Link to="/admin">Store dashboard</Link><Link to="/account">My account</Link></> : isLoggedIn && <Link to="/account">My account</Link>}
 
           {!isLoggedIn ? (
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
+              <Link to="/login?returnTo=%2Fadmin">Admin login</Link>
             </>
           ) : (
             <button type="button" onClick={handleLogout}>
@@ -133,11 +134,7 @@ export default function Navbar() {
           <Link to="/contact" onClick={() => setOpen(false)}>
             Contact
           </Link>
-          {isAdmin && (
-            <Link to="/admin" onClick={() => setOpen(false)}>
-              Dashboard
-            </Link>
-          )}
+          {isAdmin ? <><Link to="/admin" onClick={() => setOpen(false)}>Store dashboard</Link><Link to="/account" onClick={() => setOpen(false)}>My account</Link></> : isLoggedIn ? <Link to="/account" onClick={() => setOpen(false)}>My account</Link> : <Link to="/login?returnTo=%2Fadmin" onClick={() => setOpen(false)}>Admin login</Link>}
 
           {!isLoggedIn ? (
             <>

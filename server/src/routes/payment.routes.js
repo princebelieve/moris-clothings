@@ -23,7 +23,8 @@ router.post("/create-checkout-session", async (req, res) => {
     const customerWhatsappOptIn = req.body.customerWhatsappOptIn === true;
     const order = await Order.create({ items: lines, subtotal, delivery: zone.fee, amount: Math.round((subtotal + zone.fee) * 100) / 100, customerWhatsappOptIn, customerWhatsappOptInAt: customerWhatsappOptIn ? new Date() : undefined });
     const clientUrl = CLIENT_URL;
-    const session = await stripe.checkout.sessions.create({
+    const embedded = req.body.uiMode === "embedded";
+    const sessionOptions = {
       mode: "payment",
       metadata: { orderId: String(order._id), customerWhatsappOptIn: String(customerWhatsappOptIn) },
       client_reference_id: String(order._id),
@@ -33,11 +34,18 @@ router.post("/create-checkout-session", async (req, res) => {
       phone_number_collection: { enabled: true },
       billing_address_collection: "required",
       allow_promotion_codes: true,
-      success_url: `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${clientUrl}/cancel`,
-    });
+    };
+    if (embedded) {
+      sessionOptions.ui_mode = "embedded";
+      sessionOptions.redirect_on_completion = "always";
+      sessionOptions.return_url = `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
+    } else {
+      sessionOptions.success_url = `${clientUrl}/success?session_id={CHECKOUT_SESSION_ID}`;
+      sessionOptions.cancel_url = `${clientUrl}/cancel`;
+    }
+    const session = await stripe.checkout.sessions.create(sessionOptions);
     await Order.updateOne({ _id: order._id }, { $set: { stripeSessionId: session.id } });
-    res.json({ url: session.url, sessionId: session.id });
+    res.json(embedded ? { clientSecret: session.client_secret, sessionId: session.id } : { url: session.url, sessionId: session.id });
   } catch (err) { console.error("Checkout failed:", err.message); res.status(503).json({ message: "Unable to open secure checkout. Please try again shortly." }); }
 });
 module.exports = router;

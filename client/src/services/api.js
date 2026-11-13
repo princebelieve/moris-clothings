@@ -62,14 +62,14 @@ export async function resetPassword(token, password) {
 }
 
 // -------------------------
-// STRIPE (UNCHANGED)
+// STRIPE CHECKOUT
 // -------------------------
 
-export async function createCheckoutSession(items, shippingCountry, customerWhatsappOptIn = false) {
+export async function createCheckoutSession(items, shippingCountry, customerWhatsappOptIn = false, uiMode = "hosted") {
   const res = await fetch(`${BASE_URL}/api/payments/create-checkout-session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ items, shippingCountry, customerWhatsappOptIn }),
+    body: JSON.stringify({ items, shippingCountry, customerWhatsappOptIn, uiMode }),
   });
 
   const data = await readApiJson(res, "The payment service returned an unexpected response.");

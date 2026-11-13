@@ -6,11 +6,11 @@ export default function RequireAdmin({ children }) {
   const { isLoggedIn, isAdmin } = useAuth();
 
   if (!isLoggedIn) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login?returnTo=%2Fadmin" replace />;
   }
 
   if (!isAdmin) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/account" replace />;
   }
 
   return children;

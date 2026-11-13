@@ -76,7 +76,7 @@ export default function Contact() {
 
               <div>
                 <CreditCard size={20} />
-                <span>Secure Stripe Payments Coming Soon</span>
+                <span>Secure Stripe payments on online orders</span>
               </div>
             </div>
 

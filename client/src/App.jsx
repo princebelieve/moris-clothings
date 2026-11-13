@@ -29,6 +29,7 @@ import PolicyPage from "./pages/PolicyPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminBlog from "./pages/AdminBlog";
 import AdminSiteSettings from "./pages/AdminSiteSettings";
+import Account from "./pages/Account";
 import { StoreProvider, useStore } from "./context/StoreContext";
 import WhatsAppButton from "./components/WhatsAppButton";
 import RecentSalesNotice from "./components/RecentSalesNotice";
@@ -73,7 +74,7 @@ function AppRoutes() {
       {/* AUTH */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/account" element={<Login />} />
+      <Route path="/account" element={<RequireAuth><Account /></RequireAuth>} />
       <Route path="/sign-in" element={<Login />} />
       <Route path="/sign-up" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
