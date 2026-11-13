@@ -2,7 +2,9 @@ import { useEffect, useMemo, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductGrid from "../components/ProductGrid";
+import useScrollReveal from "../hooks/useScrollReveal";
 export default function Collection() {
+  useScrollReveal();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -23,8 +25,36 @@ export default function Collection() {
     if (sort === "name") result.sort((a, b) => a.name.localeCompare(b.name));
     return result;
   }, [products, search, category, sort, available]);
-  return <><Navbar /><main className="shop-shell"><div className="collection-intro"><span className="eyebrow">CONSIDERED STYLE. DISTINCTLY YOU.</span><h1>The collection</h1><p>Discover ready-to-wear pieces, occasion styles and the Moris signature.</p></div>
-    <div className="shop-toolbar"><label>Find a piece<input type="search" placeholder="Search the collection..." value={search} onChange={e => setSearch(e.target.value)} /></label><label>Category<select value={category} onChange={e => setCategory(e.target.value)}><option value="">All categories</option>{categories.map(c => <option key={c}>{c}</option>)}</select></label><label>Sort by<select value={sort} onChange={e => setSort(e.target.value)}><option value="newest">Newest first</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A-Z</option></select></label><label className="stock-filter"><input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} /> Available only</label></div>
-    {loading ? <p role="status">Loading the collection...</p> : error ? <p role="alert" className="shop-error">{error}</p> : <><p className="result-count">{filtered.length} {filtered.length === 1 ? "piece" : "pieces"}</p>{filtered.length ? <ProductGrid products={filtered} /> : <div className="empty-state"><h2>{products.length ? "No pieces match your search." : "New pieces are on their way."}</h2>{products.length > 0 && <button className="shop-button outline" onClick={() => { setSearch(""); setCategory(""); setAvailable(false); }}>Clear filters</button>}</div>}</>}
-  </main><Footer /></>;
+  return (
+    <>
+      <Navbar />
+      <main className="shop-shell">
+        <div className="collection-intro reveal">
+          <span className="eyebrow">CONSIDERED STYLE. DISTINCTLY YOU.</span>
+          <h1>The collection</h1>
+          <p>Discover ready-to-wear pieces, occasion styles and the Moris signature.</p>
+        </div>
+        <div className="shop-toolbar reveal">
+          <label>Find a piece<input type="search" placeholder="Search the collection..." value={search} onChange={e => setSearch(e.target.value)} /></label>
+          <label>Category<select value={category} onChange={e => setCategory(e.target.value)}><option value="">All categories</option>{categories.map(c => <option key={c}>{c}</option>)}</select></label>
+          <label>Sort by<select value={sort} onChange={e => setSort(e.target.value)}><option value="newest">Newest first</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Name: A-Z</option></select></label>
+          <label className="stock-filter"><input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} /> Available only</label>
+        </div>
+        <div className="reveal">
+          {loading ? <p role="status">Loading the collection...</p> : error ? <p role="alert" className="shop-error">{error}</p> : (
+            <>
+              <p className="result-count">{filtered.length} {filtered.length === 1 ? "piece" : "pieces"}</p>
+              {filtered.length ? <ProductGrid products={filtered} /> : (
+                <div className="empty-state">
+                  <h2>{products.length ? "No pieces match your search." : "New pieces are on their way."}</h2>
+                  {products.length > 0 && <button className="shop-button outline" onClick={() => { setSearch(""); setCategory(""); setAvailable(false); }}>Clear filters</button>}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
 }
