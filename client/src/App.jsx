@@ -36,6 +36,7 @@ import RecentSalesNotice from "./components/RecentSalesNotice";
 import { InstallAppProvider } from "./components/InstallApp";
 
 import RequireAdmin from "./components/RequireAdmin.jsx";
+import RequireAuth from "./components/RequireAuth.jsx";
 
 function AppRoutes() {
   const { siteSettings, storeSettings } = useStore();
