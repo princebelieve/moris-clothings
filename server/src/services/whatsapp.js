@@ -19,7 +19,8 @@ async function sendTemplateMessage(order, recipient, templateName, { customerCop
     method: "POST", headers: { Authorization: `Bearer ${process.env.WHATSAPP_ACCESS_TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify({ messaging_product: "whatsapp", recipient_type: "individual", to, type: "template", template: { name: templateName, language: { code: language || process.env.WHATSAPP_TEMPLATE_LANGUAGE }, components: [{ type: "body", parameters }] } }),
   });
-  const data = await response.json().catch(() => ({}));
+  const contentType = response.headers.get("content-type") || "";
+  const data = contentType.toLowerCase().includes("application/json") ? await response.json().catch(() => ({})) : {};
   if (!response.ok) throw new Error(data.error?.message || "WhatsApp rejected the order notification.");
   return { sent: true, messageId: data.messages?.[0]?.id || "" };
 }

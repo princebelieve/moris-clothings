@@ -1,0 +1,58 @@
+// Moris's starter catalogue, mirrored from the public Moris storefront.
+// The admin import adds missing names and restores these listed prices.
+module.exports = [
+  {
+    name: "Nice Outfit",
+    price: 30,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://morisclothing.kpochatouch.com/products/1777416162155-IMG-20250818-WA0012.jpg",
+  },
+  {
+    name: "Exotic Senator Wear",
+    price: 5,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://morisclothing.kpochatouch.com/products/1776536587964-Exotic Senator Wear.png",
+  },
+  {
+    name: "Classic Senator Design",
+    price: 1,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://i.postimg.cc/8sqSYW3t/moris-clothings-senator-design.jpg",
+  },
+  {
+    name: "Female Designer Gown",
+    price: 1,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://images.unsplash.com/photo-1566174053879-31528523f8ae?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Luxury Suit",
+    price: 2,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    name: "Gentle Man Suit",
+    price: 1,
+    category: "Ready to wear",
+    description: "",
+    sizes: [],
+    available: true,
+    image: "https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=800&q=80",
+  },
+];

@@ -5,8 +5,10 @@ import Footer from "../components/Footer";
 import AdminNav from "../components/AdminNav";
 import { getToken } from "../utils/auth";
 import { money } from "../utils/money";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
-const API = import.meta.env.VITE_API_URL;
+const API = API_BASE;
 export default function AdminDashboard() {
   const [summary, setSummary] = useState({ products: 0, orders: 0, paid: 0, revenue: 0 });
   const [error, setError] = useState("");
@@ -14,8 +16,8 @@ export default function AdminDashboard() {
     const headers = { Authorization: `Bearer ${getToken()}` };
     Promise.all([fetch(`${API}/api/products`, { headers }), fetch(`${API}/api/orders/summary`, { headers })])
       .then(async ([productsResponse, ordersResponse]) => {
-        const products = await productsResponse.json();
-        const orders = await ordersResponse.json();
+        const products = await readApiJson(productsResponse, "The dashboard could not reach the store service.");
+        const orders = await readApiJson(ordersResponse, "The dashboard could not reach the orders service.");
         if (!productsResponse.ok || !ordersResponse.ok) throw new Error(orders.message || "Unable to load the store overview.");
         setSummary({ products: products.length, orders: orders.total, paid: orders.paid, revenue: orders.revenue });
       }).catch(err => setError(err.message));

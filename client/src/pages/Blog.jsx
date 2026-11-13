@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-const API = import.meta.env.VITE_API_URL;
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
+const API = API_BASE;
 
 export default function Blog() {
   const { id } = useParams();
@@ -13,7 +15,11 @@ export default function Blog() {
   useEffect(() => {
     const controller = new AbortController();
     fetch(`${API}/api/blog${id ? `/${id}` : ""}`, { signal: controller.signal })
-      .then(async response => { const data = await response.json(); if (!response.ok) throw new Error(data.message || "Unable to load the journal."); return data; })
+      .then(async response => {
+        const data = await readApiJson(response, "The journal is temporarily unavailable. Please try again later.");
+        if (!response.ok) throw new Error(data.message || "Unable to load the journal.");
+        return data;
+      })
       .then(data => id ? setPost(data) : setPosts(Array.isArray(data) ? data : []))
       .catch(err => { if (err.name !== "AbortError") setError(err.message); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });

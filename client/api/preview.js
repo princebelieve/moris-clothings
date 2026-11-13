@@ -3,12 +3,13 @@ const { renderPreviewPage } = previewShared;
 
 export default async function preview(request, response) {
   const { type, id } = request.query;
-  const apiUrl = (process.env.VITE_API_URL || process.env.API_URL || "").replace(/\/$/, "");
+  const apiUrl = (process.env.VITE_API_URL || "").replace(/\/$/, "");
   if (!apiUrl || !["product", "blog"].includes(type) || !id) return response.status(500).type("text/plain").send("Moris page previews are not configured.");
   try {
     const path = type === "blog" ? "/api/blog/" : "/api/products/";
     const result = await fetch(`${apiUrl}${path}${encodeURIComponent(id)}`);
     if (!result.ok) return response.status(result.status === 404 ? 404 : 502).type("text/plain").send("This page is unavailable.");
+    if (!(result.headers.get("content-type") || "").toLowerCase().includes("application/json")) throw new Error("The product service returned a non-JSON response.");
     const record = await result.json();
     const siteUrl = (process.env.SITE_URL || "https://morisclothing.co.uk").replace(/\/$/, "");
     const shell = await fetch(`${siteUrl}/index.html`);

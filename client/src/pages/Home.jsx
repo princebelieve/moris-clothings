@@ -5,8 +5,10 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductGrid from "../components/ProductGrid";
 import useScrollReveal from "../hooks/useScrollReveal";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
-const API = import.meta.env.VITE_API_URL;
+const API = API_BASE;
 const slides = [
   { image: "/hero.jpg", title: "Tailored style. Everyday confidence.", eyebrow: "MORIS CLOTHING · DISTINCTLY YOURS", description: "Refined ready-to-wear and bespoke pieces, thoughtfully made for the moments that matter.", action: "Explore the collection", to: "/collection" },
   { image: "/about.jpg", title: "Made to fit. Made to be you.", eyebrow: "THE MORIS SIGNATURE", description: "Bring your vision to the studio. We’ll take care of the details.", action: "Create a bespoke piece", to: "/contact" },
@@ -43,8 +45,8 @@ export default function Home() {
   const [offers, setOffers] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${API}/api/products`, { signal: controller.signal }).then(async response => { if (!response.ok) throw new Error("The collection is temporarily unavailable."); const data = await response.json(); if (!Array.isArray(data)) throw new Error("The collection is unavailable."); setProducts(data); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
-    fetch(`${API}/api/products/bestsellers?days=7`, { signal: controller.signal }).then(response => response.ok ? response.json() : { products: [] }).then(data => { if (!controller.signal.aborted) setBestsellers(Array.isArray(data.products) ? data.products : []); }).catch(() => {}).finally(() => { if (!controller.signal.aborted) setSalesLoaded(true); });
+    fetch(`${API}/api/products`, { signal: controller.signal }).then(async response => { const data = await readApiJson(response, "The collection is temporarily unavailable."); if (!response.ok) throw new Error(data.message || "The collection is temporarily unavailable."); if (!Array.isArray(data)) throw new Error("The collection is unavailable."); setProducts(data); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    fetch(`${API}/api/products/bestsellers?days=7`, { signal: controller.signal }).then(async response => response.ok ? readApiJson(response) : { products: [] }).then(data => { if (!controller.signal.aborted) setBestsellers(Array.isArray(data.products) ? data.products : []); }).catch(() => {}).finally(() => { if (!controller.signal.aborted) setSalesLoaded(true); });
     return () => controller.abort();
   }, []);
   const newest = useMemo(() => products.slice(0, 10), [products]);

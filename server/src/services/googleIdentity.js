@@ -7,6 +7,7 @@ async function getKeys() {
   if (cachedKeys.length && Date.now() < expiresAt) return cachedKeys;
   const response = await fetch("https://www.googleapis.com/oauth2/v3/certs");
   if (!response.ok) throw new Error("Google signing keys are unavailable.");
+  if (!(response.headers.get("content-type") || "").toLowerCase().includes("application/json")) throw new Error("Google signing keys returned an unexpected response.");
   const data = await response.json();
   const maxAge = Number(response.headers.get("cache-control")?.match(/max-age=(\d+)/)?.[1]) || 300;
   cachedKeys = data.keys || [];

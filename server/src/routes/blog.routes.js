@@ -4,6 +4,7 @@ const BlogPost = require("../models/BlogPost");
 const upload = require("../middleware/upload");
 const { uploadToR2 } = require("../config/r2");
 const { protect, adminOnly } = require("../middleware/auth");
+const styleGuides = require("../data/morisStyleGuides");
 
 const router = express.Router();
 router.get("/", async (_req, res) => {
@@ -13,6 +14,15 @@ router.get("/", async (_req, res) => {
 router.get("/admin", protect, adminOnly, async (_req, res) => {
   try { res.json(await BlogPost.find().sort({ createdAt: -1 }).lean()); }
   catch { res.status(500).json({ message: "Unable to load journal articles." }); }
+});
+router.post("/import-style-guides", protect, adminOnly, async (_req, res) => {
+  try {
+    const existing = await BlogPost.find({}, { title: 1 }).lean();
+    const titles = new Set(existing.map(post => post.title.trim().toLocaleLowerCase()));
+    const additions = styleGuides.filter(article => !titles.has(article.title.toLocaleLowerCase()));
+    const posts = additions.length ? await BlogPost.insertMany(additions.map(article => ({ ...article, published: true }))) : [];
+    return res.status(201).json({ imported: posts.length, skipped: styleGuides.length - posts.length, total: styleGuides.length, posts });
+  } catch { return res.status(500).json({ message: "Unable to import Moris style guides." }); }
 });
 router.get("/:id", async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Article not found." });

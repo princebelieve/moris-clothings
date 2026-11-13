@@ -1,5 +1,3 @@
-//client/src/hooks/useScrollReveal.js
-// client/src/hooks/useScrollReveal.js
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -7,38 +5,32 @@ export default function useScrollReveal() {
   const location = useLocation();
 
   useEffect(() => {
-    const elements = document.querySelectorAll(".reveal");
+    const supportsObserver = "IntersectionObserver" in window;
+    const observer = supportsObserver ? new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("active");
+      });
+    }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }) : null;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-          }
-        });
-      },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px",
-      },
-    );
+    const observe = (node) => {
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      const elements = [];
+      if (node.matches?.(".reveal")) elements.push(node);
+      elements.push(...(node.querySelectorAll?.(".reveal") || []));
+      elements.forEach((element) => {
+        if (supportsObserver) observer.observe(element);
+        if (element.getBoundingClientRect().top < window.innerHeight * 0.92) element.classList.add("active");
+      });
+    };
 
-    elements.forEach((el) => {
-      observer.observe(el);
-    });
-
-    // ✅ IMPORTANT FIX: force reveal if already visible on load
-    elements.forEach((el) => {
-      const rect = el.getBoundingClientRect();
-      const isVisible = rect.top < window.innerHeight;
-
-      if (isVisible) {
-        el.classList.add("active");
-      }
-    });
+    observe(document.body);
+    // Some homepage sections render after the product request completes.
+    const mutations = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach(observe)));
+    mutations.observe(document.body, { childList: true, subtree: true });
 
     return () => {
-      observer.disconnect();
+      mutations.disconnect();
+      observer?.disconnect();
     };
   }, [location.pathname]);
 }

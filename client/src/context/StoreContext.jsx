@@ -1,7 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
 const StoreContext = createContext(null);
-const API = import.meta.env.VITE_API_URL;
+const API = API_BASE;
 
 function readList(key) {
   try {
@@ -22,7 +24,7 @@ export function StoreProvider({ children }) {
   const [storeSettings, setStoreSettings] = useState({});
   const siteSettings = storeSettings.site || {};
 
-  useEffect(() => { fetch(`${API}/api/settings`).then(response => response.ok ? response.json() : null).then(data => { if (data) setStoreSettings(data); }).catch(() => {}); }, []);
+  useEffect(() => { fetch(`${API}/api/settings`).then(response => response.ok ? readApiJson(response) : null).then(data => { if (data) setStoreSettings(data); }).catch(() => {}); }, []);
   useEffect(() => {
     const root = document.documentElement;
     const colors = siteSettings.colors || {};

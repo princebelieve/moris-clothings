@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
-const API = import.meta.env.VITE_API_URL;
+const API = API_BASE;
 const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 export default function GoogleAccountButton({ mode = "signin", onAuthenticated, onError, onBusy }) {
@@ -17,7 +19,7 @@ export default function GoogleAccountButton({ mode = "signin", onAuthenticated, 
           onBusy?.(true);
           try {
             const response = await fetch(`${API}/api/auth/google`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ credential }) });
-            const data = await response.json();
+            const data = await readApiJson(response, "Google sign-in is temporarily unavailable.");
             if (!response.ok || !data.token) throw new Error(data.message || "Google sign-in failed.");
             onAuthenticated(data);
           } catch (error) { onError(error.message); }
@@ -35,5 +37,6 @@ export default function GoogleAccountButton({ mode = "signin", onAuthenticated, 
     }
     return () => { active = false; };
   }, [mode, onAuthenticated, onError, onBusy]);
-  return <div className="google-account-option"><span>or continue with</span>{CLIENT_ID ? <div className="google-button-wrap"><div ref={host} /></div> : <p className="account-hint">Google sign-in will be available after VITE_GOOGLE_CLIENT_ID and GOOGLE_CLIENT_ID are configured for this deployment.</p>}</div>;
+  if (!CLIENT_ID) return null;
+  return <div className="google-account-option"><span>or continue with</span><div className="google-button-wrap"><div ref={host} /></div></div>;
 }

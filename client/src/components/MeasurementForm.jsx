@@ -1,7 +1,9 @@
 //client/src/components/MeasurementForm.jsx
 import { useState } from "react";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = API_BASE;
 
 export default function MeasurementForm() {
   const [form, setForm] = useState({
@@ -36,7 +38,7 @@ export default function MeasurementForm() {
       body: JSON.stringify(form),
     });
 
-    const data = await res.json();
+    const data = await readApiJson(res, "We could not reach the measurement service. Please try again shortly.");
 
     if (!res.ok) {
       alert(data.message || "Failed to submit measurement");

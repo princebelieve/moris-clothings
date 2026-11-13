@@ -207,8 +207,19 @@ body:has(.cart-drawer[open]) { overflow: hidden; }
 .saved-link { display: inline-flex; align-items: center; gap: 4px; padding: 8px; color: var(--navy); font-size: 11px; }
 .saved-link span { min-width: 17px; height: 17px; display: inline-grid; place-items: center; border-radius: 50%; background: #eee9dd; font-size: 10px; }
 .product-image-wrap { position: relative; }
-.product-save { position: absolute; z-index: 2; right: 10px; top: 10px; display: grid; place-items: center; width: 38px; height: 38px; border: 0; border-radius: 50%; background: rgba(255,255,255,.94); color: var(--navy); cursor: pointer; }
-.product-save.active { color: #a34040; }
+.product-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.product-title-row > a { min-width: 0; }
+.product-save-inline { position: static; flex: 0 0 36px; display: grid; place-items: center; width: 36px !important; height: 36px !important; margin: 0 !important; padding: 0; border: 1px solid #e2dfd5 !important; border-radius: 50% !important; color: var(--navy); background: #fff; cursor: pointer; }
+.product-save-inline.active { color: #a34040; border-color: #e8c9c6 !important; }
+.admin-import-tools { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; margin: 20px 0 8px; }
+.admin-import-tools label { position: relative; display: inline-flex; align-items: center; cursor: pointer; }
+.admin-import-tools input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.admin-import-help { margin: 0 0 20px; color: #727a75; font-size: 11px; line-height: 1.65; }
+.journal-import-tools { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin: 20px 0 32px; padding: 22px 24px; background: #f1efe9; border: 1px solid #e4e0d7; }
+.journal-import-tools h2 { margin: 0 0 7px; color: var(--navy); font: 400 23px Georgia,serif; }
+.journal-import-tools p { max-width: 700px; margin: 0; color: #6d746f; font-size: 12px; }
+.journal-import-tools .shop-button { flex: 0 0 auto; }
+@media (max-width: 700px) { .journal-import-tools { align-items: stretch; flex-direction: column; } }
 .discount-badge { position: absolute; z-index: 2; left: 10px; top: 10px; padding: 5px 8px; color: #fff; background: #9a3e39; font-size: 10px; font-weight: 700; }
 .product-card-copy del, .product-detail-content del { color: #858983; font-size: .82em; font-weight: 400; margin-right: 5px; }
 .compare-toggle { display: inline-flex; align-items: center; gap: 6px; border: 0; padding: 8px 0; color: #69716c; background: transparent; cursor: pointer; font-size: 11px; }

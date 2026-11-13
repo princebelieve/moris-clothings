@@ -6,6 +6,8 @@ import Footer from "../components/Footer";
 import useCart from "../hooks/useCart";
 import { createCheckoutSession } from "../services/api";
 import { money } from "../utils/money";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 
 export default function Checkout() {
   const { items, subtotal } = useCart();
@@ -17,9 +19,9 @@ export default function Checkout() {
   const [whatsappOrderCopy, setWhatsappOrderCopy] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${import.meta.env.VITE_API_URL}/api/settings`, { signal: controller.signal }).then(async response => {
+    fetch(`${API_BASE}/api/settings`, { signal: controller.signal }).then(async response => {
       if (!response.ok) throw new Error("Unable to load delivery options. Please refresh to try again.");
-      const data = await response.json(); setSettings(data); setCountry(data.shippingZones?.[0]?.countries?.[0] || "");
+      const data = await readApiJson(response, "Unable to load delivery options. Please try again shortly."); setSettings(data); setCountry(data.shippingZones?.[0]?.countries?.[0] || "");
     }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, []);

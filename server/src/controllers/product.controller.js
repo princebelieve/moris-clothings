@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Product = require("../models/Product");
 const { uploadToR2 } = require("../config/r2");
+const starterCatalog = require("../data/morisCatalog");
 function productFields(body) {
   const { name, price, originalPrice, category, description, sizes, available } = body;
   if (typeof name !== "string" || !name.trim() || name.length > 160 || price === undefined || price === "" || !Number.isFinite(Number(price)) || Number(price) < 0 || Number(price) > 100000) throw new Error("Enter a product name and a valid price between GBP 0 and GBP 100,000.");
@@ -44,6 +45,20 @@ async function getBestsellers(req, res) {
     res.status(500).json({ message: "Unable to load bestsellers." });
   }
 }
+async function importStarterProducts(_req, res) {
+  try {
+    const existing = await Product.find({}, { name: 1 }).lean();
+    const existingByName = new Map(existing.map(product => [product.name.trim().toLocaleLowerCase(), product._id]));
+    const missing = starterCatalog.filter(product => !existingByName.has(product.name.trim().toLocaleLowerCase()));
+    const pricesToRestore = starterCatalog.filter(product => product.price > 0 && existingByName.has(product.name.trim().toLocaleLowerCase()));
+    if (missing.length) await Product.insertMany(missing);
+    if (pricesToRestore.length) {
+      const byName = new Map(starterCatalog.map(product => [product.name.trim().toLocaleLowerCase(), product]));
+      await Product.bulkWrite(pricesToRestore.map(product => ({ updateOne: { filter: { _id: existingByName.get(product.name.trim().toLocaleLowerCase()) }, update: { $set: { price: byName.get(product.name.trim().toLocaleLowerCase()).price } } } })));
+    }
+    return res.json({ imported: missing.length, pricesUpdated: pricesToRestore.length, products: await Product.find().sort({ _id: -1 }) });
+  } catch { return res.status(500).json({ message: "Unable to import Moris starter products." }); }
+}
 async function createProduct(req, res) {
   let fields; try { fields = productFields(req.body); } catch (err) { return res.status(400).json({ message: err.message }); }
   if (!req.file) return res.status(400).json({ message: "Choose an image for this product." });
@@ -58,4 +73,4 @@ async function deleteProduct(req, res) {
   if (!mongoose.isValidObjectId(req.params.id)) return res.status(404).json({ message: "Product not found" });
   try { const p = await Product.findByIdAndDelete(req.params.id); if (!p) return res.status(404).json({ message: "Product not found" }); res.json({ message: "Product deleted successfully" }); } catch { res.status(500).json({ message: "Unable to delete product." }); }
 }
-module.exports = { getProducts, getProduct, getBestsellers, createProduct, updateProduct, deleteProduct };
+module.exports = { getProducts, getProduct, getBestsellers, importStarterProducts, createProduct, updateProduct, deleteProduct };

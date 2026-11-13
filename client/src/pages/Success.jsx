@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { completeCheckout } from "../hooks/useCart";
 import { money } from "../utils/money";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 export default function Success() {
   const [params] = useSearchParams();
   const sessionId = params.get("session_id");
@@ -16,8 +18,8 @@ export default function Success() {
     const controller = new AbortController();
     async function verify() {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/session/${encodeURIComponent(sessionId)}`, { signal: controller.signal });
-        const data = await res.json(); if (!res.ok) throw new Error(data.message || "Unable to verify payment.");
+        const res = await fetch(`${API_BASE}/api/orders/session/${encodeURIComponent(sessionId)}`, { signal: controller.signal });
+        const data = await readApiJson(res, "Unable to verify payment. Please retry shortly."); if (!res.ok) throw new Error(data.message || "Unable to verify payment.");
         if (!active) return;
         setOrder(data); setError("");
         if (data.status === "paid") completeCheckout(sessionId);

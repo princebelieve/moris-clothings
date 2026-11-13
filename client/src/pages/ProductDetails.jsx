@@ -7,6 +7,8 @@ import { addToCart } from "../hooks/useCart";
 import { money } from "../utils/money";
 import { useStore } from "../context/StoreContext";
 import ShareLinks from "../components/ShareLinks";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 export default function ProductDetails() {
   const { id } = useParams();
   const { wishlist, compare, toggleWish, toggleCompare } = useStore();
@@ -19,9 +21,9 @@ export default function ProductDetails() {
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true); setError(""); setAdded(false); setSize(""); setQuantity(1);
-    fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, { signal: controller.signal }).then(async res => {
+    fetch(`${API_BASE}/api/products/${id}`, { signal: controller.signal }).then(async res => {
       if (!res.ok) throw new Error(res.status === 404 ? "This product is no longer available." : "Unable to load this product. Please try again.");
-      setProduct(await res.json());
+      setProduct(await readApiJson(res, "Unable to load this product. Please try again."));
     }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [id]);

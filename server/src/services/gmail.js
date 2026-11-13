@@ -8,6 +8,7 @@ async function getAccessToken() {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({ client_id: process.env.GMAIL_CLIENT_ID, client_secret: process.env.GMAIL_CLIENT_SECRET, refresh_token: process.env.GMAIL_REFRESH_TOKEN, grant_type: "refresh_token" }),
   });
+  if (!(response.headers.get("content-type") || "").toLowerCase().includes("application/json")) throw new Error("Gmail API returned an unexpected response.");
   const data = await response.json();
   if (!response.ok || !data.access_token) throw new Error("Gmail API could not issue an access token.");
   return data.access_token;

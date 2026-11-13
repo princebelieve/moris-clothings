@@ -1,7 +1,9 @@
 //client/src/services/api.js
-const BASE_URL = import.meta.env.VITE_API_URL;
+import { API_BASE } from "./apiBase";
+import { readApiJson } from "./apiResponse";
+const BASE_URL = API_BASE;
 async function readResponse(response) {
-  const data = await response.json().catch(() => ({}));
+  const data = await readApiJson(response, "The account service is temporarily unavailable.");
   if (!response.ok) throw new Error(data.message || data.error || "The request could not be completed.");
   return data;
 }
@@ -70,7 +72,7 @@ export async function createCheckoutSession(items, shippingCountry, customerWhat
     body: JSON.stringify({ items, shippingCountry, customerWhatsappOptIn }),
   });
 
-  const data = await res.json();
+  const data = await readApiJson(res, "The payment service returned an unexpected response.");
 
   if (!res.ok) {
     throw new Error(data.error || data.message || "Payment session failed");

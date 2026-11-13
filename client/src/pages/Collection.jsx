@@ -4,6 +4,8 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import ProductGrid from "../components/ProductGrid";
 import useScrollReveal from "../hooks/useScrollReveal";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 export default function Collection() {
   const { category: routeCategory } = useParams();
   useScrollReveal();
@@ -19,7 +21,7 @@ export default function Collection() {
   useEffect(() => { setCategory(routeCategory || ""); }, [routeCategory]);
   useEffect(() => {
     const controller = new AbortController();
-    fetch(`${import.meta.env.VITE_API_URL}/api/products`, { signal: controller.signal }).then(res => { if (!res.ok) throw new Error("Unable to load the collection. Please refresh to try again."); return res.json(); }).then(data => { if (!Array.isArray(data)) throw new Error("The collection is unavailable."); setProducts(data); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    fetch(`${API_BASE}/api/products`, { signal: controller.signal }).then(async res => { if (!res.ok) { const data = await readApiJson(res, "Unable to load the collection. Please try again shortly."); throw new Error(data.message || "Unable to load the collection."); } return readApiJson(res, "Unable to load the collection. Please try again shortly."); }).then(data => { if (!Array.isArray(data)) throw new Error("The collection is unavailable."); setProducts(data); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, []);
   const categories = [...new Set(products.map(p => p.category).filter(Boolean))];

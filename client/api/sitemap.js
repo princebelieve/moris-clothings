@@ -2,10 +2,14 @@ const SITE_URL = (process.env.SITE_URL || "https://morisclothing.co.uk").replace
 const escapeXml = value => String(value).replace(/[<>&'\"]/g, char => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", "\"": "&quot;" }[char]));
 const staticPaths = ["/", "/collection", "/about", "/contact", "/faq", "/blog", "/terms", "/privacy", "/shipping", "/returns-refunds", "/disclaimer"];
 export default async function sitemap(_request, response) {
-  const apiUrl = (process.env.SITEMAP_API_URL || process.env.VITE_API_URL || process.env.API_URL || "").replace(/\/$/, "");
+  const apiUrl = (process.env.VITE_API_URL || "").replace(/\/$/, "");
   let products = []; let posts = [];
   if (apiUrl) {
-    try { const [productResponse, postResponse] = await Promise.all([fetch(`${apiUrl}/api/products`), fetch(`${apiUrl}/api/blog`)]); if (productResponse.ok) products = await productResponse.json(); if (postResponse.ok) posts = await postResponse.json(); }
+    try {
+      const [productResponse, postResponse] = await Promise.all([fetch(`${apiUrl}/api/products`), fetch(`${apiUrl}/api/blog`)]);
+      if (productResponse.ok && (productResponse.headers.get("content-type") || "").toLowerCase().includes("application/json")) products = await productResponse.json();
+      if (postResponse.ok && (postResponse.headers.get("content-type") || "").toLowerCase().includes("application/json")) posts = await postResponse.json();
+    }
     catch (error) { console.error("Could not fetch Moris sitemap records", error); }
   }
   const categories = [...new Set(products.map(product => product.category).filter(Boolean))];

@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import AdminNav from "../components/AdminNav";
 import { getToken } from "../utils/auth";
+import { API_BASE } from "../services/apiBase";
+import { readApiJson } from "../services/apiResponse";
 import { money } from "../utils/money";
-const API = import.meta.env.VITE_API_URL;
+const API = API_BASE;
 export default function AdminOrders() {
   const [data, setData] = useState({ orders: [], total: 0, pages: 0 });
   const [status, setStatus] = useState("paid");
@@ -13,7 +15,7 @@ export default function AdminOrders() {
   const [refresh, setRefresh] = useState(0);
   useEffect(() => {
     const controller = new AbortController(); setLoading(true); setError("");
-    fetch(`${API}/api/orders?page=${page}&status=${status}`, { signal: controller.signal, headers: { Authorization: `Bearer ${getToken()}` } }).then(async res => { const result = await res.json(); if (!res.ok) throw new Error(result.message || "Unable to load orders."); setData(result); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
+    fetch(`${API}/api/orders?page=${page}&status=${status}`, { signal: controller.signal, headers: { Authorization: `Bearer ${getToken()}` } }).then(async res => { const result = await readApiJson(res, "Unable to load orders. Please try again shortly."); if (!res.ok) throw new Error(result.message || "Unable to load orders."); setData(result); }).catch(err => { if (err.name !== "AbortError") setError(err.message); }).finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
   }, [page, status, refresh]);
   return <><Navbar /><main className="shop-shell admin-page"><p className="eyebrow">MORIS STORE MANAGER</p><h1>Orders</h1><AdminNav /><div className="shop-heading"><label>Payment status <select value={status} onChange={e => { setStatus(e.target.value); setPage(1); }}><option value="">All orders</option>{["paid", "pending", "failed", "expired"].map(s => <option key={s}>{s}</option>)}</select></label><button className="shop-button outline" onClick={() => setRefresh(r => r + 1)}>Refresh orders</button></div>
@@ -30,11 +32,11 @@ function OrderCard({ order }) {
   const address = order.shipping?.address;
   async function save() {
     setBusy(true); setNotice("");
-    try { const res = await fetch(`${API}/api/orders/${order._id}`, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` }, body: JSON.stringify({ fulfillment, trackingNumber }) }); const result = await res.json(); if (!res.ok) throw new Error(result.message || "Unable to save."); setNotice("Fulfillment updated."); } catch (err) { setNotice(err.message); } finally { setBusy(false); }
+    try { const res = await fetch(`${API}/api/orders/${order._id}`, { method: "PATCH", headers: { "Content-Type": "application/json", Authorization: `Bearer ${getToken()}` }, body: JSON.stringify({ fulfillment, trackingNumber }) }); const result = await readApiJson(res, "Unable to save the order. Please try again shortly."); if (!res.ok) throw new Error(result.message || "Unable to save."); setNotice("Fulfillment updated."); } catch (err) { setNotice(err.message); } finally { setBusy(false); }
   }
   async function notify(path, key, label) {
     setNotificationBusy(key); setNotice("");
-    try { const response = await fetch(`${API}/api/orders/${order._id}/${path}`, { method: "POST", headers: { Authorization: `Bearer ${getToken()}` } }); const data = await response.json(); if (!response.ok) throw new Error(data.message || `Unable to send ${label}.`); setNotifications(current => ({ ...current, [key]: data.orderEmailNotifiedAt || data.whatsappNotifiedAt || data.customerWhatsappNotifiedAt || new Date().toISOString() })); setNotice(`${label} sent.`); }
+    try { const response = await fetch(`${API}/api/orders/${order._id}/${path}`, { method: "POST", headers: { Authorization: `Bearer ${getToken()}` } }); const data = await readApiJson(response, `Unable to send ${label}. Please try again shortly.`); if (!response.ok) throw new Error(data.message || `Unable to send ${label}.`); setNotifications(current => ({ ...current, [key]: data.orderEmailNotifiedAt || data.whatsappNotifiedAt || data.customerWhatsappNotifiedAt || new Date().toISOString() })); setNotice(`${label} sent.`); }
     catch (err) { setNotice(err.message); }
     finally { setNotificationBusy(""); }
   }
