@@ -3,12 +3,14 @@ import useCart from "../hooks/useCart";
 //client/src/components/Navbar.jsx
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Heart, Menu, Scale, X } from "lucide-react";
 import useAuth from "../hooks/useAuth";
 import useClickOutside from "../hooks/useClickOutside";
+import { useStore } from "../context/StoreContext";
 
 export default function Navbar() {
   const { count } = useCart();
+  const { wishlist, compare } = useStore();
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -63,10 +65,11 @@ export default function Navbar() {
         <div className="nav-links">
           <Link to="/">Home</Link>
           <Link to="/collection">Collection</Link>
+          <Link to="/blog">Journal</Link>
           <Link to="/about">About</Link>
           <Link to="/contact">Contact</Link>
 
-          {isAdmin && <Link to="/admin/products">Admin</Link>}
+          {isAdmin && <Link to="/admin">Dashboard</Link>}
 
           {!isLoggedIn ? (
             <>
@@ -89,7 +92,11 @@ export default function Navbar() {
         </button>
       </div>
 
-      <button className="bag-link" onClick={openCart} aria-label={`Shopping bag, ${count} items`}>Bag <span>{count}</span></button>
+      <div className="nav-shopping-tools">
+        <Link className="saved-link" to="/wishlist" aria-label={`Wishlist, ${wishlist.length} saved items`}><Heart size={18} /><span>{wishlist.length}</span></Link>
+        <Link className="saved-link" to="/compare" aria-label={`Compare, ${compare.length} products`}><Scale size={18} /><span>{compare.length}</span></Link>
+        <button className="bag-link" onClick={openCart} aria-label={`Shopping bag, ${count} items`}>Bag <span>{count}</span></button>
+      </div>
       <button
         ref={buttonRef}
         type="button"
@@ -115,6 +122,9 @@ export default function Navbar() {
           <Link to="/collection" onClick={() => setOpen(false)}>
             Collection
           </Link>
+          <Link to="/wishlist" onClick={() => setOpen(false)}>Wishlist ({wishlist.length})</Link>
+          <Link to="/compare" onClick={() => setOpen(false)}>Compare ({compare.length})</Link>
+          <Link to="/blog" onClick={() => setOpen(false)}>Journal</Link>
 
           <Link to="/about" onClick={() => setOpen(false)}>
             About
@@ -124,8 +134,8 @@ export default function Navbar() {
             Contact
           </Link>
           {isAdmin && (
-            <Link to="/admin/products" onClick={() => setOpen(false)}>
-              Admin
+            <Link to="/admin" onClick={() => setOpen(false)}>
+              Dashboard
             </Link>
           )}
 

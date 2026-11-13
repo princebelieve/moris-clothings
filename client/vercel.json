@@ -1,6 +1,20 @@
 {
   "rewrites": [
     {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/product/:id",
+      "has": [{ "type": "header", "key": "user-agent", "value": { "re": ".*(facebookexternalhit|Twitterbot|Slackbot|LinkedInBot|WhatsApp|Discordbot|TelegramBot|Pinterestbot|Googlebot).*" } }],
+      "destination": "/api/preview?type=product&id=:id"
+    },
+    {
+      "source": "/blog/:id",
+      "has": [{ "type": "header", "key": "user-agent", "value": { "re": ".*(facebookexternalhit|Twitterbot|Slackbot|LinkedInBot|WhatsApp|Discordbot|TelegramBot|Pinterestbot|Googlebot).*" } }],
+      "destination": "/api/preview?type=blog&id=:id"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

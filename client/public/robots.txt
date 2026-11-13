@@ -5,5 +5,11 @@ Disallow: /cart
 Disallow: /checkout
 Disallow: /success
 Disallow: /cancel
+Disallow: /wishlist
+Disallow: /compare
+Disallow: /account
+Disallow: /sign-in
+Disallow: /sign-up
 Disallow: /reset-password
+Disallow: /forgot-password
 Sitemap: https://morisclothing.co.uk/sitemap.xml

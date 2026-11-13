@@ -9,6 +9,7 @@ async function fulfillOrder(session) {
     status: "paid",
     customer: { name: session.customer_details?.name, email: session.customer_details?.email, phone: session.customer_details?.phone },
     shipping: shipping || {},
+    customerWhatsappOptIn: session.metadata?.customerWhatsappOptIn === "true",
   };
   // Repeated webhook deliveries must preserve fulfillment edits and the original paid timestamp.
   const paid = await Order.findOneAndUpdate({ stripeSessionId: session.id, status: { $ne: "paid" } }, { $set: { ...fields, paidAt: new Date() } }, { new: true });

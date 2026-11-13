@@ -1,0 +1,14 @@
+{
+  "name": "Moris Clothing",
+  "short_name": "Moris",
+  "description": "Ready-to-wear and bespoke pieces from Moris Clothing.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f9fc",
+  "theme_color": "#172c48",
+  "icons": [
+    { "src": "/icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

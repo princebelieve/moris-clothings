@@ -17,7 +17,7 @@ export default function AdminProducts() {
   useEffect(() => { loadProducts().catch(err => setError(err.message)).finally(() => setLoading(false)); }, []);
   async function submit(form) {
     const body = new FormData();
-    ["name", "price", "category", "description", "sizes", "available"].forEach(key => body.append(key, form[key]));
+    ["name", "price", "originalPrice", "category", "description", "sizes", "available"].forEach(key => body.append(key, form[key]));
     if (form.image) body.append("image", form.image);
     const res = await fetch(`${API}/api/products${editing ? `/${editing._id}` : ""}`, { method: editing ? "PUT" : "POST", headers: { Authorization: `Bearer ${getToken()}` }, body });
     const data = await res.json(); if (!res.ok) throw new Error(data.message || data.error || "Unable to save product.");

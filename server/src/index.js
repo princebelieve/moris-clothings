@@ -24,6 +24,7 @@ app.use(
   express.raw({ type: "application/json" }),
   webhookRoutes,
 );
+app.use("/api/webhooks/whatsapp", express.raw({ type: "application/json" }), require("./routes/whatsapp-webhook.routes"));
 
 // middleware
 app.use(
@@ -41,6 +42,8 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/settings", require("./routes/settings.routes"));
+app.use("/api/blog", require("./routes/blog.routes"));
+app.use("/api/sitemap.xml", require("./routes/sitemap.routes"));
 app.use("/api/measurements", measurementRoutes);
 
 app.get("/", (req, res) => {

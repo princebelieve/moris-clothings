@@ -5,6 +5,7 @@ const upload = require("../middleware/upload");
 const {
   getProducts,
   getProduct,
+  getBestsellers,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -13,6 +14,7 @@ const {
 const { protect, adminOnly } = require("../middleware/auth");
 
 router.get("/", getProducts);
+router.get("/bestsellers", getBestsellers);
 router.get("/:id", getProduct);
 
 // 🔐 PROTECTED ADMIN ACTIONS

@@ -20,11 +20,12 @@ router.post("/create-checkout-session", async (req, res) => {
     let lines;
     try { lines = priceItems(items, products); } catch (err) { return res.status(409).json({ message: err.message }); }
     const subtotal = lines.reduce((sum, item) => sum + Math.round(item.price * 100) * item.quantity, 0) / 100;
-    const order = await Order.create({ items: lines, subtotal, delivery: zone.fee, amount: Math.round((subtotal + zone.fee) * 100) / 100 });
+    const customerWhatsappOptIn = req.body.customerWhatsappOptIn === true;
+    const order = await Order.create({ items: lines, subtotal, delivery: zone.fee, amount: Math.round((subtotal + zone.fee) * 100) / 100, customerWhatsappOptIn, customerWhatsappOptInAt: customerWhatsappOptIn ? new Date() : undefined });
     const clientUrl = CLIENT_URL;
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
-      metadata: { orderId: String(order._id) },
+      metadata: { orderId: String(order._id), customerWhatsappOptIn: String(customerWhatsappOptIn) },
       client_reference_id: String(order._id),
       line_items: lines.map(item => ({ price_data: { currency: "gbp", product_data: { name: item.name + (item.size ? ` - ${item.size}` : "") }, unit_amount: Math.round(item.price * 100) }, quantity: item.quantity })),
       shipping_address_collection: { allowed_countries: [country] },
