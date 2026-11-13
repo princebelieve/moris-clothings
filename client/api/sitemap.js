@@ -2,7 +2,7 @@ const SITE_URL = (process.env.SITE_URL || "https://morisclothing.co.uk").replace
 const escapeXml = value => String(value).replace(/[<>&'\"]/g, char => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", "'": "&apos;", "\"": "&quot;" }[char]));
 const staticPaths = ["/", "/collection", "/about", "/contact", "/faq", "/blog", "/terms", "/privacy", "/shipping", "/returns-refunds", "/disclaimer"];
 export default async function sitemap(_request, response) {
-  const apiUrl = (process.env.VITE_API_URL || "").replace(/\/$/, "");
+  const apiUrl = (process.env.VITE_API_URL || "https://moris-clothings.onrender.com").replace(/\/$/, "");
   let products = []; let posts = [];
   if (apiUrl) {
     try {

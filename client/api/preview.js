@@ -3,7 +3,7 @@ const { renderPreviewPage } = previewShared;
 
 export default async function preview(request, response) {
   const { type, id } = request.query;
-  const apiUrl = (process.env.VITE_API_URL || "").replace(/\/$/, "");
+  const apiUrl = (process.env.VITE_API_URL || "https://moris-clothings.onrender.com").replace(/\/$/, "");
   if (!apiUrl || !["product", "blog"].includes(type) || !id) return response.status(500).type("text/plain").send("Moris page previews are not configured.");
   try {
     const path = type === "blog" ? "/api/blog/" : "/api/products/";
