@@ -1,32 +1,3 @@
-//client/src/components/Hero.jsx
-import { useNavigate } from "react-router-dom";
-
-export default function Hero() {
-  const navigate = useNavigate();
-
-  return (
-    <div className="hero">
-      <div>
-        <h1>Tailored Style. Premium Confidence.</h1>
-
-        <p>
-          Premium tailoring, senator wears, suits, gowns and custom fashion for
-          men and women.
-        </p>
-
-        <div>
-          <button className="primary" onClick={() => navigate("/collection")}>
-            Shop Collection
-          </button>
-
-          <button
-            className="secondary"
-            onClick={() => window.open("https://wa.me/447440092312", "_blank")}
-          >
-            WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+export default function Hero() { return <section className="hero"><div><span className="eyebrow">MORIS CLOTHING &middot; DISTINCTLY YOURS</span><h1>Tailored style.<br />Everyday confidence.</h1><p>Refined ready-to-wear and bespoke pieces. Thoughtfully made for the moments that matter.</p><div className="hero-actions"><Link className="shop-button" to="/collection">Shop the collection <ArrowRight size={18} /></Link><Link className="hero-secondary" to="/contact">Create your bespoke piece</Link></div></div></section>; }

@@ -1,12 +1,4 @@
-//client/src/utils/auth.js
-export function setToken(token) {
-  localStorage.setItem("token", token);
-}
-
-export function getToken() {
-  return localStorage.getItem("token");
-}
-
-export function logout() {
-  localStorage.removeItem("token");
-}
+const notify = () => window.dispatchEvent(new Event("moris:auth"));
+export function setToken(token) { localStorage.setItem("token", token); notify(); }
+export function getToken() { try { return localStorage.getItem("token"); } catch { return null; } }
+export function logout() { localStorage.removeItem("token"); notify(); }

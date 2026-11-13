@@ -1,147 +1,33 @@
-// src/pages/AdminProducts.jsx
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
+import AdminNav from "../components/AdminNav";
 import ProductForm from "../components/ProductForm";
 import { getToken } from "../utils/auth";
-
-const BASE_URL = import.meta.env.VITE_API_URL;
-
+import { money } from "../utils/money";
+const API = import.meta.env.VITE_API_URL;
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
-  const [editingProduct, setEditingProduct] = useState(null);
-
-  async function loadProducts() {
-    const res = await fetch(`${BASE_URL}/api/products`);
-    const data = await res.json();
-    setProducts(data);
-  }
-
-  useEffect(() => {
-    loadProducts();
-  }, []);
-
-  async function handleSubmit(formData) {
-    const method = editingProduct ? "PUT" : "POST";
-
-    const url = editingProduct
-      ? `${BASE_URL}/api/products/${editingProduct._id}`
-      : `${BASE_URL}/api/products`;
-
+  const [editing, setEditing] = useState(null);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const [deleting, setDeleting] = useState("");
+  async function loadProducts() { const res = await fetch(`${API}/api/products`); const data = await res.json(); if (!res.ok || !Array.isArray(data)) throw new Error(data.message || "Unable to load products."); setProducts(data); }
+  useEffect(() => { loadProducts().catch(err => setError(err.message)).finally(() => setLoading(false)); }, []);
+  async function submit(form) {
     const body = new FormData();
-
-    body.append("name", formData.name);
-    body.append("price", formData.price);
-
-    if (formData.image) {
-      body.append("image", formData.image);
-    }
-
-    const res = await fetch(url, {
-      method,
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-      body,
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.message || "Unable to save product");
-      return;
-    }
-
-    setEditingProduct(null);
-    loadProducts();
+    ["name", "price", "category", "description", "sizes", "available"].forEach(key => body.append(key, form[key]));
+    if (form.image) body.append("image", form.image);
+    const res = await fetch(`${API}/api/products${editing ? `/${editing._id}` : ""}`, { method: editing ? "PUT" : "POST", headers: { Authorization: `Bearer ${getToken()}` }, body });
+    const data = await res.json(); if (!res.ok) throw new Error(data.message || data.error || "Unable to save product.");
+    setProducts(p => editing ? p.map(item => item._id === data._id ? data : item) : [data, ...p]); setEditing(null); setNotice("Product saved.");
   }
-
-  async function handleDelete(id) {
-    const ok = window.confirm("Delete this product?");
-    if (!ok) return;
-
-    const res = await fetch(`${BASE_URL}/api/products/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.message || "Unable to delete product");
-      return;
-    }
-
-    if (editingProduct?._id === id) {
-      setEditingProduct(null);
-    }
-
-    loadProducts();
+  async function remove(product) {
+    if (!window.confirm(`Delete ${product.name}? Existing order records will be kept.`)) return;
+    setDeleting(product._id); setError("");
+    try { const res = await fetch(`${API}/api/products/${product._id}`, { method: "DELETE", headers: { Authorization: `Bearer ${getToken()}` } }); const data = await res.json(); if (!res.ok) throw new Error(data.message || "Unable to delete product."); setProducts(p => p.filter(i => i._id !== product._id)); if (editing?._id === product._id) setEditing(null); setNotice("Product deleted."); } catch (err) { setError(err.message); } finally { setDeleting(""); }
   }
-
-  return (
-    <>
-      <Navbar />
-
-      <div className="page">
-        <h1>Admin Products</h1>
-
-        <ProductForm
-          onSubmit={handleSubmit}
-          editingProduct={editingProduct}
-          onCancelEdit={() => setEditingProduct(null)}
-        />
-
-        <div
-          style={{
-            display: "grid",
-            gap: 20,
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            marginTop: 30,
-          }}
-        >
-          {products.map((product) => (
-            <div
-              key={product._id}
-              style={{
-                border: "1px solid #ddd",
-                padding: 20,
-                borderRadius: 8,
-                background: "#fff",
-              }}
-            >
-              <img
-                src={product.image}
-                alt={product.name}
-                style={{
-                  width: "100%",
-                  height: 180,
-                  objectFit: "cover",
-                  borderRadius: 6,
-                  marginBottom: 12,
-                }}
-              />
-
-              <h3>{product.name}</h3>
-              <p>£{product.price.toLocaleString()}</p>
-
-              <div style={{ display: "flex", gap: 10 }}>
-                <button
-                  type="button"
-                  onClick={() => setEditingProduct(product)}
-                >
-                  Edit
-                </button>
-
-                <button type="button" onClick={() => handleDelete(product._id)}>
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
-  );
+  const filtered = products.filter(p => `${p.name} ${p.category || ""}`.toLowerCase().includes(search.toLowerCase()));
+  return <><Navbar /><main className="shop-shell admin-page"><p className="eyebrow">MORIS STORE MANAGER</p><h1>Products</h1><AdminNav />{error && <p role="alert" className="shop-error">{error}</p>}<p role="status">{notice}</p><div className="admin-products-layout"><ProductForm key={editing?._id || "new"} onSubmit={submit} editingProduct={editing} onCancelEdit={() => setEditing(null)} /><section><div className="shop-heading"><h2>Catalogue ({products.length})</h2><label>Search products<input type="search" value={search} onChange={e => setSearch(e.target.value)} /></label></div>{loading ? <p role="status">Loading products...</p> : !filtered.length ? <p>No products to display.</p> : filtered.map(p => <article className="admin-product-row" key={p._id}><img src={p.image || "/logo.png"} alt={p.name} /><div><h3>{p.name}</h3><p>{money(p.price)} &middot; {p.category || "Uncategorised"}</p><span className="status-pill">{p.available === false ? "Sold out" : "Available"}</span></div><div className="row-actions"><button onClick={() => { setEditing(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Edit</button><button disabled={deleting === p._id} onClick={() => remove(p)}>{deleting === p._id ? "Deleting..." : "Delete"}</button></div></article>)}</section></div></main></>;
 }

@@ -1,85 +1,10 @@
-// src/components/ProductForm.jsx
-import { useState, useEffect } from "react";
-
-export default function ProductForm({
-  onSubmit,
-  editingProduct,
-  onCancelEdit,
-}) {
-  const [form, setForm] = useState({
-    name: "",
-    price: "",
-    image: "",
-  });
-
-  useEffect(() => {
-    if (editingProduct) {
-      setForm({
-        name: editingProduct.name,
-        price: editingProduct.price,
-        image: editingProduct.image,
-      });
-    } else {
-      setForm({ name: "", price: "", image: "" });
-    }
-  }, [editingProduct]);
-
-  function handleChange(e) {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    onSubmit({
-      ...form,
-      price: Number(form.price),
-    });
-
-    setForm({ name: "", price: "", image: "" });
-  }
-
-  return (
-    <form onSubmit={handleSubmit} className="form" style={{ maxWidth: 500 }}>
-      <h2>{editingProduct ? "Edit Product" : "Add Product"}</h2>
-
-      <input
-        name="name"
-        placeholder="Product name"
-        value={form.name}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        name="price"
-        type="number"
-        placeholder="Price"
-        value={form.price}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setForm({ ...form, image: e.target.files[0] })}
-      />
-
-      <div className="form-actions">
-        <button type="submit" className="btn-primary">
-          {editingProduct ? "Update Product" : "Add Product"}
-        </button>
-
-        {editingProduct && (
-          <button type="button" onClick={onCancelEdit} className="btn-danger">
-            Cancel
-          </button>
-        )}
-      </div>
-    </form>
-  );
+import { useState } from "react";
+export default function ProductForm({ onSubmit, editingProduct, onCancelEdit }) {
+  const [form, setForm] = useState({ name: editingProduct?.name || "", price: editingProduct?.price ?? "", category: editingProduct?.category || "Ready to wear", description: editingProduct?.description || "", sizes: editingProduct?.sizes?.join(", ") || "", available: editingProduct?.available !== false });
+  const [image, setImage] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  function change(e) { setForm(f => ({ ...f, [e.target.name]: e.target.type === "checkbox" ? e.target.checked : e.target.value })); }
+  async function submit(e) { e.preventDefault(); setBusy(true); setError(""); try { await onSubmit({ ...form, price: Number(form.price), image }); if (!editingProduct) { setForm({ name: "", price: "", category: "Ready to wear", description: "", sizes: "", available: true }); setImage(null); e.target.reset(); } } catch (err) { setError(err.message); } finally { setBusy(false); } }
+  return <form onSubmit={submit} className="form product-editor"><h2>{editingProduct ? "Edit product" : "Add a piece"}</h2><label>Product name<input name="name" maxLength={160} value={form.name} onChange={change} required /></label><div className="editor-row"><label>Price (GBP)<input name="price" type="number" min="0" max="100000" step="0.01" value={form.price} onChange={change} required /></label><label>Category<input name="category" maxLength={80} value={form.category} onChange={change} /></label></div><label>Description<textarea name="description" rows={4} maxLength={4000} value={form.description} onChange={change} /></label><label>Sizes, separated by commas<input name="sizes" maxLength={500} placeholder="S, M, L, XL - leave blank if no size selection is needed" value={form.sizes} onChange={change} /></label><label className="check-label"><input name="available" type="checkbox" checked={form.available} onChange={change} /> Available to purchase</label><label>Product image<input type="file" accept="image/jpeg,image/png,image/webp" required={!editingProduct} onChange={e => setImage(e.target.files[0] || null)} /></label>{editingProduct?.image && !image && <img className="editor-preview" src={editingProduct.image} alt="Current product" />}{error && <p role="alert" className="shop-error">{error}</p>}<div className="form-actions"><button type="submit" disabled={busy} className="btn-primary">{busy ? "Saving..." : editingProduct ? "Save changes" : "Add product"}</button>{editingProduct && <button disabled={busy} type="button" onClick={onCancelEdit}>Cancel</button>}</div></form>;
 }

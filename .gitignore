@@ -70,3 +70,8 @@ coverage
 # =====================
 uploads
 **/uploads
+# Safe deployment template (contains no credentials)
+!server/.env.production.example
+
+# Local browser QA artifacts
+.qa/

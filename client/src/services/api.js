@@ -53,11 +53,11 @@ export async function resetPassword(token, password) {
 // STRIPE (UNCHANGED)
 // -------------------------
 
-export async function createCheckoutSession(productId) {
+export async function createCheckoutSession(items, shippingCountry) {
   const res = await fetch(`${BASE_URL}/api/payments/create-checkout-session`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ productId }),
+    body: JSON.stringify({ items, shippingCountry }),
   });
 
   const data = await res.json();

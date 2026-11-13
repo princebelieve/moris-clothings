@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /success
+Disallow: /cancel
+Disallow: /reset-password
+Sitemap: https://morisclothing.co.uk/sitemap.xml

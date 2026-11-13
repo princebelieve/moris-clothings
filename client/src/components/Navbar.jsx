@@ -1,3 +1,5 @@
+import { openCart } from "./CartDrawer";
+import useCart from "../hooks/useCart";
 //client/src/components/Navbar.jsx
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,6 +8,7 @@ import useAuth from "../hooks/useAuth";
 import useClickOutside from "../hooks/useClickOutside";
 
 export default function Navbar() {
+  const { count } = useCart();
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -80,24 +83,28 @@ export default function Navbar() {
         <button
           type="button"
           className="cta"
-          onClick={() => navigate("/contact")}
+          onClick={() => navigate("/collection")}
         >
-          Order Now
+          Shop now
         </button>
       </div>
 
+      <button className="bag-link" onClick={openCart} aria-label={`Shopping bag, ${count} items`}>Bag <span>{count}</span></button>
       <button
         ref={buttonRef}
         type="button"
         className="hamburger"
         onClick={() => setOpen(!open)}
         aria-label="Toggle menu"
+        aria-expanded={open}
+        aria-controls="mobile-navigation"
       >
         {open ? <X size={30} /> : <Menu size={30} />}
       </button>
 
       <div
         ref={menuRef}
+        id="mobile-navigation"
         className={`mobile-menu-overlay ${open ? "active" : ""}`}
       >
         <div className="mobile-menu-links">

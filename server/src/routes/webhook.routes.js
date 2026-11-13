@@ -1,51 +1,17 @@
-//server/src/routes/webhook.routes.js
 const express = require("express");
-const router = express.Router();
 const stripe = require("../services/stripe");
 const Order = require("../models/Order");
-
+const fulfillOrder = require("../services/fulfillOrder");
+const router = express.Router();
 router.post("/", async (req, res) => {
-  const sig = req.headers["stripe-signature"];
-
   let event;
-
+  try { event = stripe.webhooks.constructEvent(req.body, req.headers["stripe-signature"], process.env.STRIPE_WEBHOOK_SECRET); }
+  catch { return res.status(400).send("Invalid webhook signature"); }
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      process.env.STRIPE_WEBHOOK_SECRET,
-    );
-  } catch (err) {
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  if (event.type === "checkout.session.completed") {
     const session = event.data.object;
-
-    const existingOrder = await Order.findOne({
-      stripeSessionId: session.id,
-    });
-
-    if (existingOrder) {
-      return res.json({ received: true });
-    }
-
-    console.log("🚨 NEW ORDER RECEIVED");
-    console.log({
-      productId: session.metadata.productId,
-      amount: session.amount_total / 100,
-      stripeSessionId: session.id,
-    });
-
-    await Order.create({
-      productId: session.metadata.productId,
-      stripeSessionId: session.id,
-      amount: session.amount_total / 100,
-      status: "paid",
-    });
-  }
-
-  res.json({ received: true });
+    if (["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event.type)) await fulfillOrder(session);
+    if (["checkout.session.expired", "checkout.session.async_payment_failed"].includes(event.type)) await Order.updateOne({ stripeSessionId: session.id, status: "pending" }, { $set: { status: event.type.endsWith("expired") ? "expired" : "failed" } });
+    res.json({ received: true });
+  } catch (err) { console.error("Order webhook failed:", err.message); res.status(500).json({ message: "Order processing failed; please retry." }); }
 });
-
 module.exports = router;

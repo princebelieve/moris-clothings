@@ -10,9 +10,10 @@ const paymentRoutes = require("./routes/payment.routes");
 const webhookRoutes = require("./routes/webhook.routes");
 const productRoutes = require("./routes/product.routes");
 const orderRoutes = require("./routes/order.routes");
-const authRoutes = require("./routes/auth.routes"); // ✅ ADD THIS
+const authRoutes = require("./routes/auth.routes"); // Ã¢Å“â€¦ ADD THIS
 const measurementRoutes = require("./routes/measurementRoutes");
 
+const { CLIENT_URL } = require("./config/site");
 const app = express();
 
 connectDB();
@@ -27,7 +28,7 @@ app.use(
 // middleware
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [CLIENT_URL, "https://morisclothing.co.uk", "https://www.morisclothing.co.uk"].filter(Boolean),
     credentials: true,
   }),
 );
@@ -35,10 +36,11 @@ app.use(
 app.use(express.json());
 
 // routes
-app.use("/api/auth", authRoutes); // ✅ ADD THIS
+app.use("/api/auth", authRoutes); // Ã¢Å“â€¦ ADD THIS
 app.use("/api/payments", paymentRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/settings", require("./routes/settings.routes"));
 app.use("/api/measurements", measurementRoutes);
 
 app.get("/", (req, res) => {
